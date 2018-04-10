@@ -13,6 +13,9 @@
     "popper.js": "^1.14.3",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
+    "react-geolocated": "^2.3.0",
+    "react-geolocation": "^1.0.3",
+    "react-google-autocomplete": "^1.0.15",
     "reactstrap": "^5.0.0",
     "underscore": "^1.8.3"
   },

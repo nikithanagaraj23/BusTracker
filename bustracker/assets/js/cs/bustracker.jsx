@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Provider, connect } from 'react-redux';
 import Nav from './nav';
+import DestinationForm from './destination_form';
 
 export default function bustracker_init(store) {
   ReactDOM.render(
@@ -18,7 +19,9 @@ let Bustracker = connect((state) => state)((props) =>  {
       <Router>
         <div>
           <Nav />
-      
+          <Route path="/findbuses" exact={true}  render={() =>
+             <DestinationForm  />
+           } />
         </div>
       </Router>
     );

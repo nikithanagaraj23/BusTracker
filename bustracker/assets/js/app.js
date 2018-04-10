@@ -23,6 +23,8 @@ import store from './store';
 import api from './api';
 
 import bustracker_init from "./cs/bustracker";
+
+
 $(function() {
   api.request_history();
   api.request_users();
