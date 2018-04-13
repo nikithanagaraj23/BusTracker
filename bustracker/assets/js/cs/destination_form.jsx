@@ -7,8 +7,22 @@ import api from '../api';
 import Autocomplete from 'react-google-autocomplete';
 import Geolocation from "react-geolocation";
 
+
+
 export default function DestinationForm(params) {
-  return<div>
+  function getaddress(lat, lon){
+
+    fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + lat + ',' + lon + '&key=' + 'AIzaSyDs3GeKIvLr4uKv4ChTRx10ktEUzh4WAvY')
+          .then((response) => response.json())
+          .then((responseJson) => {
+              console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson));
+              var address = responseJson.results[0].formatted_address;
+              console.log ("formatted_address", address);
+              document.getElementById("addr").value = address;
+  })
+  }
+
+  return <div>
     <Geolocation
       onSuccess={console.log}
       render={({
@@ -18,23 +32,22 @@ export default function DestinationForm(params) {
         getCurrentPosition
       }) =>
         <div>
-          <button onClick={getCurrentPosition}>Get Position</button>
-          {error &&
-            <div>
-              {error.message}
-            </div>}
-          <pre>
-            latitude: {latitude}
-            longitude: {longitude}
-          </pre>
+          {getaddress(latitude, longitude)}
+          <Autocomplete id="addr" placeholder="Enter your current location" style={{width:"90%"}}
+            onPlaceSelected={(place) => {
+              console.log(place.geometry.location.lat());
+              console.log(place.geometry.location.lng());
+            }}
+            types={['geocode']}
+            />
         </div>}
     />
-    <Autocomplete style={{width:"90%"}}
+  <Autocomplete placeholder="Enter your destination" style={{width:"90%"}}
       onPlaceSelected={(place) => {
         console.log(place.geometry.location.lat());
         console.log(place.geometry.location.lng());
       }}
-      types={['(regions)']}
+      types={['geocode']}
       />
     <Button> Find Buses</Button>
   </div>;
