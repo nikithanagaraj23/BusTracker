@@ -58,6 +58,93 @@ class TheServer {
      },
    });
  }
+
+ getBuses() {
+   let routeID = []
+   $.ajax({
+    type: 'GET',
+    url: 'https://api-v3.mbta.com/routes?filter%5Btype%5D=03',
+    data: {
+      'response-format': "jsonp",
+      'api-key': '0119e1c013dd48009e5fddae784c2ed4',
+    },
+    success: function(data) {
+      console.log("Route ID:",data.data.length);
+      var i=0;
+      for (i = 0; i < data.data.length; ++i) {
+        routeID[i] = data.data[i].id;
+      }
+    },
+    error: function(err) {
+      console.log('error:' + err)
+    }
+  });
+
+  console.log("All Route IDS: ",routeID)
+}
+
+getStopsForRouteID(routeID){
+  let stopID = []
+  console.log("Route ID from getStops: ",routeID)
+  $.ajax({
+   type: 'GET',
+   url: 'https://api-v3.mbta.com/stops?filter%5Broute%5D='+routeID,
+   data: {
+     'response-format': "jsonp",
+     'api-key': '0119e1c013dd48009e5fddae784c2ed4',
+   },
+   success: function(data) {
+     console.log("Stop ID length:",data.data.length);
+     var i=0;
+     for (i = 0; i < data.data.length; ++i) {
+       stopID[i] = data.data[i].id;
+       console.log("StopIDs:",data.data[i].id)
+     }
+   },
+   error: function(err) {
+     console.log('error:' + err)
+   }
+ });
+ console.log("Route ID: "+routeID+"Stop IDS:"+stopID)
+  return stopID
+}
+
+getStops(latitude,longitude) {
+  $.ajax({
+   type: 'GET',
+   url: 'https://api-v3.mbta.com/stops?latitude='+latitude+'&longitude='+ longitude+'&radius=0.002&route_type=3&key=0119e1c013dd48009e5fddae784c2ed4',
+   data: {
+     'response-format': "jsonp",
+     'api-key': '0119e1c013dd48009e5fddae784c2ed4',
+   },
+   success: function(data) {
+     console.log("get stops",data);
+   },
+   error: function(err) {
+     console.log('error:' + err)
+   }
+ });
+}
+
+getStopIDs(latitude,longitude){
+  var newdata = $.ajax({
+   type: 'GET',
+   async: false,
+   url: 'https://api-v3.mbta.com/stops?latitude='+latitude+'&longitude='+ longitude+'&radius=0.002&route_type=3',
+   data: {
+     'response-format': "jsonp",
+     'api-key': '0119e1c013dd48009e5fddae784c2ed4',
+   },
+   success: function(data) {
+     console.log("get stops id",data);
+   },
+   error: function(err) {
+     console.log('error:' + err)
+   }
+ });
+ return newdata;
+}
+
 }
 
 export default new TheServer();
