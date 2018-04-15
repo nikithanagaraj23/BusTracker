@@ -99,4 +99,4 @@ function state2props(state) {
   };
 }
 
-export default connect(state2props)(Nav);
+export default connect(state2props, null, null, {pure: false})(Nav);

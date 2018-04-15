@@ -34,6 +34,7 @@ let Bustracker = connect((state) => state)((props) =>  {
       <Router>
         <div>
           <Nav />
+          <h4 className="msg"> Please login if returning user or register if new user</h4>
            <Route path="/register" exact={true} render={() =>
             <RegisterForm />
           } />
