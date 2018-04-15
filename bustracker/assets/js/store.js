@@ -1,4 +1,4 @@
- import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers } from 'redux';
 import deepFreeze from 'deep-freeze';
 
 function histories(state = [], action) {
@@ -47,15 +47,12 @@ function users(state = [], action) {
   switch (action.type) {
   case 'USERS_LIST':
     return [...action.users];
-  case 'REGISTER_USER':
-    return [action.user, ...state];
   default:
     return state;
   }
 }
 
 let empty_form = {
-  name: "",
   user_id: "",
   body: "",
   token: "",
@@ -79,7 +76,7 @@ function root_reducer(state0, action) {
   console.log("reducer", action);
   // {histories, users, form} is ES6 shorthand for
   // {histories: histories, users: users, form: form}
-  let reducer = combineReducers({histories, users, token, login, form});
+  let reducer = combineReducers({histories, users, token, login});
   let state1 = reducer(state0, action);
   console.log("state1", state1);
   return deepFreeze(state1);
