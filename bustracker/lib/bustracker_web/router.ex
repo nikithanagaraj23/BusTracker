@@ -18,6 +18,7 @@ defmodule BustrackerWeb.Router do
 
     get "/", PageController, :index
     get "/findbuses", PageController, :index
+  
   end
 
   # Other scopes may use custom stacks.

@@ -54,7 +54,10 @@ function users(state = [], action) {
 
 let empty_form = {
   user_id: "",
-  body: "",
+  location: "",
+  stops: "",
+  stop: "",
+  predictions: "",
   token: "",
 };
 
@@ -73,12 +76,8 @@ function form(state = empty_form, action) {
 
 
 function root_reducer(state0, action) {
-  console.log("reducer", action);
-  // {histories, users, form} is ES6 shorthand for
-  // {histories: histories, users: users, form: form}
-  let reducer = combineReducers({histories, users, token, login});
+  let reducer = combineReducers({histories, users, form, token, login});
   let state1 = reducer(state0, action);
-  console.log("state1", state1);
   return deepFreeze(state1);
 };
 

@@ -10,24 +10,37 @@ import Geolocation from "react-geolocation";
 
 
 function DestinationForm(params) {
-  var stopsavailable;
   function getaddress(lat, lon){
     fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + lat + ',' + lon + '&key=' + 'AIzaSyDs3GeKIvLr4uKv4ChTRx10ktEUzh4WAvY')
           .then((response) => response.json())
           .then((responseJson) => {
-              // console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson));
               var address = responseJson.results[0].formatted_address;
-              // console.log ("formatted_address", address);
               document.getElementById("addr").value = address;
   })
 
   let allRoutes = getBuses();
-  console.log(lat,lon);
-  //getStops(42.345466,-71.0698);
-  // api.getStops(lat,lon);
   let allStops = api.getStopIDs(lat,lon);
-  console.log('data received',allStops.responseJSON.data);
-  stopsavailable = _.map(allStops.responseJSON.data,(uu) => <option key={uu.attributes.id} value={uu.attributes.name}>{uu.attributes.name}</option>);
+  let data = {};
+  data['stops'] = allStops.responseJSON.data;
+  let action = {
+    type: 'UPDATE_FORM',
+    data: data,
+  };
+  params.dispatch(action);
+  }
+
+  function fetchStops(ev) {
+    let tgt = $(ev.target);
+    let data = {};
+    data[tgt.attr('name')] = tgt.val();
+    if($("input[name=location]")){
+      data['location'] = $("input[name=location]").val();
+    }
+    let action = {
+      type: 'UPDATE_FORM',
+      data: data,
+    };
+    params.dispatch(action);
   }
 
   function getBuses(){
@@ -39,56 +52,78 @@ function DestinationForm(params) {
   }
 
   function getPrediction(){
-    let predictions = api.getPrediction(1226);
-    console.log("arrival time ",predictions.responseJSON.data[0].attributes.arrival_time);
-    console.log("Route ID",predictions.responseJSON.data[0].relationships.route.data.id);
+    var stop = parseInt(params.form.stop);
+    let predictions = api.getPrediction(stop);
+    let data = {};
+    data['predictions'] = predictions.responseJSON.data;
+    let action = {
+      type: 'UPDATE_FORM',
+      data: data,
+    };
+    params.dispatch(action);
+    //var time = predictions.responseJSON.data[0].attributes.arrival_time;
+
+    let allRoutes = _.map(predictions.responseJSON.data, (uu) => uu.relationships.route.data.id);
+    console.log(allRoutes);
+    let destinations = _.map(allRoutes, (uu) => api.getTripDestination(uu).responseJSON.data[0].attributes.headsign);
+    console.log(destinations);
   }
 
-  // let stopsavailable = _.map(params.users, (uu) => <option key={uu.id} value={uu.name}>{uu.name}</option>);
-  console.log("before render",stopsavailable);
+  function formatDate(time){
+      var dt = new Date(time);
+      var t = dt.toLocaleTimeString();
+      t = t.replace(/\u200E/g, '');
+      t = t.replace(/^([^\d]*\d{1,2}:\d{1,2}):\d{1,2}([^\d]*)$/, '$1$2');
+      var result = t;
+      return result;
+  }
+
+  let stopsavailable = _.map(params.form.stops, (uu) => <option key={uu.id} value={uu.id}>{uu.attributes.name}</option>);
+  let predictions = _.map(params.form.predictions, (uu) => <tr key={uu.id}><td>{uu.relationships.route.data.id}</td>
+<td>{api.getTripDestination(uu.relationships.route.data.id).responseJSON.data[0].attributes.headsign}</td>
+<td>{formatDate(uu.attributes.arrival_time)}</td></tr>);
+
   return <div>
-    <Geolocation
-      onSuccess={console.log}
-      render={({
-        fetchingPosition,
-        position: { coords: { latitude, longitude } = {} } = {},
-        error,
-        getCurrentPosition
-      }) =>
-        <div>
-          <Autocomplete id="addr" placeholder="Enter your current location" style={{width:"90%"}}
-            onPlaceSelected={(place) => {
-              getaddress(place.geometry.location.lat(), place.geometry.location.lng())
-               console.log(place.geometry.location.lat());
-               console.log(place.geometry.location.lng());
-            }}
-            types={['geocode']}
-            />
-        </div>}
-    />
-  <Autocomplete placeholder="Enter your destination" style={{width:"90%"}}
-      onPlaceSelected={(place) => {
-        getaddress(place.geometry.location.lat(), place.geometry.location.lng())
-        // console.log(place.geometry.location.lat());
-        // console.log(place.geometry.location.lng());
-      }}
-      types={['geocode']}
-      />
+      <FormGroup>
+        <Geolocation
+          onSuccess={console.log}
+          render={({
+            fetchingPosition,
+            position: { coords: { latitude, longitude } = {} } = {},
+            error,
+            getCurrentPosition
+          }) =>
+            <div id="location-details">
+              <Autocomplete id="addr" name="location" placeholder="Enter your current location" value={params.form.location} onChange={fetchStops} style={{width:"90%"}}
+                onPlaceSelected={(place) => {
+                  getaddress(place.geometry.location.lat(), place.geometry.location.lng())
+                   console.log(place.geometry.location.lat());
+                   console.log(place.geometry.location.lng());
+                }}
+                types={['geocode']}
+                />
+            </div>}
+        />
+    </FormGroup>
+    <Button onClick={fetchStops}> Fetch Stops</Button>
     <FormGroup>
        <Label for="stops">Stops</Label>
-         <Input type="select" name="stops"  >
-           <option value="" selected disabled hidden>Choose here</option>
-           { stopsavailable }
+         <Input type="select" name="stop" value={params.form.stop} onChange={fetchStops} >
+           {stopsavailable}
          </Input>
      </FormGroup>
     <Button onClick={getBuses}> Find Buses</Button>
     <Button onClick={getPrediction}> Get Predictions </Button>
+    <table className="table">
+      <tbody>
+        {predictions}
+      </tbody>
+    </table>
   </div>;
 }
 
 
 function state2props(state) {
-  console.log("rerender", state);
   return { form: state.form};
 }
 
