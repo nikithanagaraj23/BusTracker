@@ -1,4 +1,4 @@
-import { createStore, combineReducers } from 'redux';
+ import { createStore, combineReducers } from 'redux';
 import deepFreeze from 'deep-freeze';
 
 function histories(state = [], action) {

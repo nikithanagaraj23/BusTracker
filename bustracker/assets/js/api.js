@@ -109,21 +109,23 @@ getStopsForRouteID(routeID){
   return stopID
 }
 
-getStops(latitude,longitude) {
-  $.ajax({
+getPrediction(stopID) {
+  var newdata = $.ajax({
    type: 'GET',
-   url: 'https://api-v3.mbta.com/stops?latitude='+latitude+'&longitude='+ longitude+'&radius=0.002&route_type=3&key=0119e1c013dd48009e5fddae784c2ed4',
+   async: false,
+   url: 'https://api-v3.mbta.com/predictions?filter%5Bstop%5D='+ stopID,
    data: {
      'response-format': "jsonp",
      'api-key': '0119e1c013dd48009e5fddae784c2ed4',
    },
    success: function(data) {
-     console.log("get stops",data);
+     console.log("Predictions received",data);
    },
    error: function(err) {
      console.log('error:' + err)
    }
  });
+ return newdata;
 }
 
 getStopIDs(latitude,longitude){

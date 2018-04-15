@@ -9,7 +9,8 @@ import Geolocation from "react-geolocation";
 
 
 
-export default function DestinationForm(params) {
+function DestinationForm(params) {
+  var stopsavailable;
   function getaddress(lat, lon){
     fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + lat + ',' + lon + '&key=' + 'AIzaSyDs3GeKIvLr4uKv4ChTRx10ktEUzh4WAvY')
           .then((response) => response.json())
@@ -25,8 +26,8 @@ export default function DestinationForm(params) {
   //getStops(42.345466,-71.0698);
   // api.getStops(lat,lon);
   let allStops = api.getStopIDs(lat,lon);
-  console.log('destination',allStops.responseJSON.data);
-
+  console.log('data received',allStops.responseJSON.data);
+  stopsavailable = _.map(allStops.responseJSON.data,(uu) => <option key={uu.attributes.id} value={uu.attributes.name}>{uu.attributes.name}</option>);
   }
 
   function getBuses(){
@@ -37,11 +38,14 @@ export default function DestinationForm(params) {
     api.getStopsForRouteID(43)
   }
 
-  function getStops(latitude,longitude){
-    // console.log("From getSTops")
-    api.getStops(latitude,longitude);
+  function getPrediction(){
+    let predictions = api.getPrediction(1226);
+    console.log("arrival time ",predictions.responseJSON.data[0].attributes.arrival_time);
+    console.log("Route ID",predictions.responseJSON.data[0].relationships.route.data.id);
   }
 
+  // let stopsavailable = _.map(params.users, (uu) => <option key={uu.id} value={uu.name}>{uu.name}</option>);
+  console.log("before render",stopsavailable);
   return <div>
     <Geolocation
       onSuccess={console.log}
@@ -52,7 +56,6 @@ export default function DestinationForm(params) {
         getCurrentPosition
       }) =>
         <div>
-          {getaddress(latitude, longitude)}
           <Autocomplete id="addr" placeholder="Enter your current location" style={{width:"90%"}}
             onPlaceSelected={(place) => {
               getaddress(place.geometry.location.lat(), place.geometry.location.lng())
@@ -71,7 +74,22 @@ export default function DestinationForm(params) {
       }}
       types={['geocode']}
       />
+    <FormGroup>
+       <Label for="stops">Stops</Label>
+         <Input type="select" name="stops"  >
+           <option value="" selected disabled hidden>Choose here</option>
+           { stopsavailable }
+         </Input>
+     </FormGroup>
     <Button onClick={getBuses}> Find Buses</Button>
-    <Button onClick={getStopsRouteID}> Find Routes </Button>
+    <Button onClick={getPrediction}> Get Predictions </Button>
   </div>;
 }
+
+
+function state2props(state) {
+  console.log("rerender", state);
+  return { form: state.form};
+}
+
+export default connect(state2props)(DestinationForm);
