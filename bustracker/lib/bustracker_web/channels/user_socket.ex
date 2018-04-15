@@ -6,6 +6,7 @@ defmodule BustrackerWeb.UserSocket do
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
+  channel "prediction:*", BustrackerWeb.PredictionChannel
   # transport :longpoll, Phoenix.Transports.LongPoll
 
   # Socket params are passed from the client and can

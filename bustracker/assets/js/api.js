@@ -94,7 +94,6 @@ class TheServer {
       console.log('error:' + err)
     }
   });
-
   console.log("All Route IDS: ",routeID)
 }
 
@@ -124,6 +123,27 @@ getStopsForRouteID(routeID){
   return stopID
 }
 
+
+getTripDestination(routeID) {
+  var newdata = $.ajax({
+   type: 'GET',
+   async: false,
+   url: 'https://api-v3.mbta.com/trips?page%5Blimit%5D=1&filter%5Bdirection_id%5D=1&filter%5Broute%5D='+ routeID,
+   data: {
+     'response-format': "jsonp",
+     'api-key': '0119e1c013dd48009e5fddae784c2ed4',
+   },
+   success: function(data) {
+     // console.log("Trips received",data);
+   },
+   error: function(err) {
+     console.log('error:' + err)
+   }
+ });
+ return newdata;
+}
+
+
 getPrediction(stopID) {
   var newdata = $.ajax({
    type: 'GET',
@@ -142,6 +162,8 @@ getPrediction(stopID) {
  });
  return newdata;
 }
+
+
 
 getStopIDs(latitude,longitude){
   var newdata = $.ajax({
