@@ -7,13 +7,23 @@
   },
   "dependencies": {
     "bootstrap": "^4.0.0",
+    "deep-freeze": "0.0.1",
     "jquery": "^3.3.1",
+    "npm": "^5.8.0",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
     "popper.js": "^1.14.3",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
+    "react-geolocated": "^2.3.0",
+    "react-geolocation": "^1.0.3",
+    "react-google-autocomplete": "^1.0.15",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.2.2",
     "reactstrap": "^5.0.0",
+    "redux": "^3.7.2",
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
