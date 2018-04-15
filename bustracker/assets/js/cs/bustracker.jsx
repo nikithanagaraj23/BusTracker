@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Provider, connect } from 'react-redux';
 import Nav from './nav';
 import DestinationForm from './destination_form';
+import RegisterForm from './registration-form';
 
 export default function bustracker_init(store) {
   ReactDOM.render(
@@ -15,6 +16,8 @@ export default function bustracker_init(store) {
 }
 
 let Bustracker = connect((state) => state)((props) =>  {
+  var token =  localStorage.getItem("token");
+  if(props.token || token){
     return (
       <Router>
         <div>
@@ -25,4 +28,17 @@ let Bustracker = connect((state) => state)((props) =>  {
         </div>
       </Router>
     );
+  }
+  else {
+    return (
+      <Router>
+        <div>
+          <Nav />
+           <Route path="/register" exact={true} render={() =>
+            <RegisterForm />
+          } />
+        </div>
+      </Router>
+    );
+  }
 });

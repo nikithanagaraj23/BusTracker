@@ -17,7 +17,6 @@ let LoginForm = connect(({login}) => {return {login};})((props) => {
 
   function create_token(ev) {
     api.submit_login(props.login);
-    console.log(props.login);
   }
 
   return <div className="navbar-text">
@@ -36,37 +35,62 @@ let LoginForm = connect(({login}) => {return {login};})((props) => {
 });
 
 let Session = connect(({token}) => {return {token};})((props) => {
+
+  function log_out(ev) {
+    localStorage.clear();
+    window.location.reload();
+  }
+
   return <div className="navbar-text">
-    User id = { props.token.user_id }
+    <span className="login"> Logged in as User ID { window.localStorage.getItem("user_id") } </span>
+    <Button className="btn-primary" onClick={log_out}>Log Out</Button>
   </div>;
 });
 
 function Nav(props) {
-  let session_info;
 
-  if (props.token) {
-    session_info = <Session token={props.token} />;
+  var tok = window.localStorage.getItem("token");
+  var uid = window.localStorage.getItem("user_id");
+  var token = {"user_id": uid, "token": tok};
+
+  if(props.token){
+    window.localStorage.setItem("token", props.token.token);
+    window.localStorage.setItem("user_id", props.token.user_id);
+  }
+
+  if (props.token || tok) {
+    return (
+      <nav className="navbar navbar-dark bg-dark navbar-expand">
+        <span className="navbar-brand">
+          Bustracker
+        </span>
+        <ul className="navbar-nav mr-auto">
+          <NavItem>
+            <NavLink to="/" exact={true} activeClassName="active" className="nav-link">Feed</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink to="/findbuses"  href="#" className="nav-link">Find Buses</NavLink>
+          </NavItem>
+        </ul>
+        <Session token={token} />;
+      </nav>
+    );
   }
   else {
-    session_info = <LoginForm />
+    return (
+      <nav className="navbar navbar-dark bg-dark navbar-expand">
+        <span className="navbar-brand">
+          Bustracker
+        </span>
+        <ul className="navbar-nav mr-auto">
+          <NavItem>
+              <NavLink to="/register" href="#" className="nav-link">Register</NavLink>
+          </NavItem>
+        </ul>
+        <LoginForm />
+      </nav>
+    );
   }
-
-  return (
-    <nav className="navbar navbar-dark bg-dark navbar-expand">
-      <span className="navbar-brand">
-        Bustracker
-      </span>
-      <ul className="navbar-nav mr-auto">
-        <NavItem>
-          <NavLink to="/" exact={true} activeClassName="active" className="nav-link">Feed</NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink to="/findbuses"  href="#" className="nav-link">Find Buses</NavLink>
-        </NavItem>
-      </ul>
-      { session_info }
-    </nav>
-  );
 }
 
 function state2props(state) {

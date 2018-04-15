@@ -15,6 +15,21 @@ class TheServer {
     });
   }
 
+  register_user(data) {
+    $.ajax("/api/v1/users", {
+      method: "post",
+      dataType: "json",
+      contentType: "application/json; charset=UTF-8",
+      data: JSON.stringify({ token: data.token, user: data }),
+      success: (resp) => {
+        store.dispatch({
+          type: 'REGISTER_USER',
+          user: resp.data,
+        });
+      },
+    });
+  }
+  
   request_users() {
     $.ajax("/api/v1/users", {
       method: "get",
