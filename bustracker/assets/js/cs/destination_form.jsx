@@ -62,12 +62,12 @@ function DestinationForm(params) {
     };
     params.dispatch(action);
     //var time = predictions.responseJSON.data[0].attributes.arrival_time;
-
     let allRoutes = _.map(predictions.responseJSON.data, (uu) => uu.relationships.route.data.id);
     console.log(allRoutes);
     let destinations = _.map(allRoutes, (uu) => api.getTripDestination(uu).responseJSON.data[0].attributes.headsign);
     console.log(destinations);
   }
+
 
   function formatDate(time){
       var dt = new Date(time);
@@ -79,9 +79,9 @@ function DestinationForm(params) {
   }
 
   let stopsavailable = _.map(params.form.stops, (uu) => <option key={uu.id} value={uu.id}>{uu.attributes.name}</option>);
-  let predictions = _.map(params.form.predictions, (uu) => <tr key={uu.id}><td>{uu.relationships.route.data.id}</td>
-<td>{api.getTripDestination(uu.relationships.route.data.id).responseJSON.data[0].attributes.headsign}</td>
-<td>{formatDate(uu.attributes.arrival_time)}</td></tr>);
+  let predictions = _.map(params.form.predictions, (uu) => <div><Link key={uu.id} to={'/schedule/'+uu.relationships.route.data.id}>{uu.relationships.route.data.id}
+{api.getTripDestination(uu.relationships.route.data.id).responseJSON.data[0].attributes.headsign}
+{formatDate(uu.attributes.arrival_time)}</Link></div>);
 
   return <div>
       <FormGroup>
@@ -97,8 +97,6 @@ function DestinationForm(params) {
               <Autocomplete id="addr" name="location" placeholder="Enter your current location" value={params.form.location} onChange={fetchStops} style={{width:"90%"}}
                 onPlaceSelected={(place) => {
                   getaddress(place.geometry.location.lat(), place.geometry.location.lng())
-                   console.log(place.geometry.location.lat());
-                   console.log(place.geometry.location.lng());
                 }}
                 types={['geocode']}
                 />
@@ -114,11 +112,7 @@ function DestinationForm(params) {
      </FormGroup>
     <Button onClick={getBuses}> Find Buses</Button>
     <Button onClick={getPrediction}> Get Predictions </Button>
-    <table className="table">
-      <tbody>
-        {predictions}
-      </tbody>
-    </table>
+    <div>{predictions}</div>
   </div>;
 }
 

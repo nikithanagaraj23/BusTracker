@@ -109,6 +109,27 @@ getStopsForRouteID(routeID){
 }
 
 
+
+getSchedule(routeID,time) {
+  var newdata = $.ajax({
+   type: 'GET',
+   async: false,
+   url: 'https://api-v3.mbta.com/schedules?filter%5Bmin_time%5D='+time+'&filter%5Broute%5D='+routeID,
+   data: {
+     'response-format': "jsonp",
+     'api-key': '0119e1c013dd48009e5fddae784c2ed4',
+   },
+   success: function(data) {
+     console.log("schedule received",data);
+   },
+   error: function(err) {
+     console.log('error:' + err)
+   }
+ });
+ return newdata;
+}
+
+
 getTripDestination(routeID) {
   var newdata = $.ajax({
    type: 'GET',
