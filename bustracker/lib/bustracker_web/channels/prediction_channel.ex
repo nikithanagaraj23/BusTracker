@@ -14,9 +14,9 @@ defmodule BustrackerWeb.PredictionChannel do
 
   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
-  def handle_in("predictions", %{stop: stop}, socket) do
+  def handle_in("callpredictions", %{"stop" => stop}, socket) do\
     predictions = Prediction.get_prediction(stop)
-    {:reply, {:ok, predictions: predictions}, socket}
+    {:reply, {:ok, %{ "predictions" => predictions}}, socket}
   end
 
   # It is also common to receive messages from the client and

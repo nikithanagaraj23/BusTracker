@@ -54,6 +54,7 @@ function DestinationForm(params) {
   function getView(data2){
     let predictions = data2["predictions"];
     let data = {};
+    console.log("GET VIEW");
     data['predictions'] = predictions;
     let action = {
       type: 'UPDATE_FORM',
@@ -63,11 +64,12 @@ function DestinationForm(params) {
   }
 
   function getPrediction(){
+
     let socket = new Socket("/socket", {params: {token: window.userToken}});
     socket.connect();
     var stop = parseInt(params.form.stop);
     let channel = socket.channel("prediction:"+ stop, {});
-  
+
     channel.join()
                 .receive("ok", resp => { getView(resp)})
                 .receive("error", resp => { console.log("Unable to join", resp)});
@@ -76,6 +78,8 @@ function DestinationForm(params) {
     console.log(allRoutes);
     let destinations = _.map(allRoutes, (uu) => api.getTripDestination(uu).responseJSON.data[0].attributes.headsign);
     console.log(destinations);
+    setInterval(function(){channel.push("callpredictions", {stop: stop})
+                                  .receive("ok", resp => { getView(resp)});}, 60000);
   }
 
   function formatDate(time){
