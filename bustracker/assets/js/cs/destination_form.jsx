@@ -79,7 +79,8 @@ function DestinationForm(params) {
   }
 
   let stopsavailable = _.map(params.form.stops, (uu) => <option key={uu.id} value={uu.id}>{uu.attributes.name}</option>);
-  let predictions = _.map(params.form.predictions, (uu) => <div><Link key={uu.id} to={'/schedule/'+uu.relationships.route.data.id}>{uu.relationships.route.data.id}
+  let predictions = _.map(params.form.predictions, (uu) => <div><Link key={uu.id} to={'/schedule/route='+uu.relationships.route.data.id+'&trip='+uu.relationships.trip.data.id}>
+  {uu.relationships.route.data.id}
 {api.getTripDestination(uu.relationships.route.data.id).responseJSON.data[0].attributes.headsign}
 {formatDate(uu.attributes.arrival_time)}</Link></div>);
 

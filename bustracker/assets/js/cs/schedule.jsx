@@ -10,24 +10,30 @@ import Geolocation from "react-geolocation";
 
 
 function Schedule(params) {
-  function addZero(i) {
-      if (i < 10) {
-          i = "0" + i;
-      }
-      return i;
+  var url = window.location.href;
+  var query = url.substring(url.lastIndexOf('/')+1).split("&");
+  var routeID = query[0].split("=")[1];
+  var tripID = query[1].split("=")[1];
+
+  console.log("trips and routes",routeID,tripID);
+  let schedule = api.getSchedule(routeID,tripID);
+  console.log(schedule.responseJSON.data);
+
+  function formatDate(time){
+      var dt = new Date(time);
+      var t = dt.toLocaleTimeString();
+      t = t.replace(/\u200E/g, '');
+      t = t.replace(/^([^\d]*\d{1,2}:\d{1,2}):\d{1,2}([^\d]*)$/, '$1$2');
+      var result = t;
+      return result;
   }
 
-  var d = new Date();
-  var h = addZero(d.getHours());
-  var m = addZero(d.getMinutes());
-  var currenttime= h + ":" + m ;
-  var url = window.location.href;
-  var routeID = url.substring(url.lastIndexOf('/')+1);
-  let schedule = api.getSchedule(routeID,currenttime);
-  console.log("schedule",schedule);
+  let schedules = _.map(schedule.responseJSON.data, (uu) => <div>
+    {api.getStopName(uu.relationships.stop.data.id).responseJSON.data.attributes.name} {formatDate(uu.attributes.departure_time)}
+    </div>);
 
   return<div>
-      hey
+    {schedules}
   </div>;
 }
 
