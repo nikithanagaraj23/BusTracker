@@ -8,7 +8,22 @@ import Autocomplete from 'react-google-autocomplete';
 import Geolocation from "react-geolocation";
 import {Socket} from "phoenix";
 
+
 function DestinationForm(params) {
+  function google_map(lat, lng){
+    console.log("LAT", lat, "LONG", lng);
+  var map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: lat, lng: lng},
+    zoom: 8
+  });
+  var marker = new google.maps.Marker({
+         position: {lat: lat, lng: lng},
+         map: map,
+         title: 'Hello World!'
+       });
+}
+
+  google_map(42.338643499999996, -71.0882297);
 
   function getaddress(lat, lon){
     fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + lat + ',' + lon + '&key=' + 'AIzaSyDs3GeKIvLr4uKv4ChTRx10ktEUzh4WAvY')
@@ -16,7 +31,9 @@ function DestinationForm(params) {
           .then((responseJson) => {
               var address = responseJson.results[0].formatted_address;
               document.getElementById("addr").value = address;
+              google_map(lat, lon);
   })
+
 
   let allRoutes = getBuses();
   let allStops = api.getStopIDs(lat,lon);
@@ -109,7 +126,9 @@ function DestinationForm(params) {
             getCurrentPosition
           }) =>
             <div id="location-details">
-              <Autocomplete id="addr" name="location" placeholder="Enter your current location" value={params.form.location} onChange={fetchStops} style={{width:"90%"}}
+              <div> {latitude} </div>
+              <div>{longitude}</div>
+              <Autocomplete id="addr" name="location" searchtext="default text"  value={params.form.location} onChange={fetchStops} style={{width:"90%"}}
                 onPlaceSelected={(place) => {
                   getaddress(place.geometry.location.lat(), place.geometry.location.lng())
                 }}
@@ -118,6 +137,7 @@ function DestinationForm(params) {
             </div>}
         />
     </FormGroup>
+
     <Button onClick={fetchStops}> Fetch Stops</Button>
     <FormGroup>
        <Label for="stops">Stops</Label>

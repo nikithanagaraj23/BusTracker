@@ -8,6 +8,7 @@ import RegisterForm from './registration-form';
 import Schedule from './schedule';
 
 export default function bustracker_init(store) {
+  
   ReactDOM.render(
     <Provider store={store}>
       <Bustracker state={store.getState()}/>
