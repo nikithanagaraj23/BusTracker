@@ -6,10 +6,10 @@ import { Button, FormGroup, Label, Input } from 'reactstrap';
 import api from '../api';
 import Autocomplete from 'react-google-autocomplete';
 import Geolocation from "react-geolocation";
-
-
+import {Socket} from "phoenix";
 
 function DestinationForm(params) {
+
   function getaddress(lat, lon){
     fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + lat + ',' + lon + '&key=' + 'AIzaSyDs3GeKIvLr4uKv4ChTRx10ktEUzh4WAvY')
           .then((response) => response.json())
@@ -51,19 +51,28 @@ function DestinationForm(params) {
     api.getStopsForRouteID(43)
   }
 
-  function getPrediction(){
-    var stop = parseInt(params.form.stop);
-    let predictions = api.getPrediction(stop);
+  function getView(data2){
+    let predictions = data2["predictions"];
     let data = {};
-    data['predictions'] = predictions.responseJSON.data;
+    data['predictions'] = predictions;
     let action = {
       type: 'UPDATE_FORM',
       data: data,
     };
     params.dispatch(action);
-    //var time = predictions.responseJSON.data[0].attributes.arrival_time;
+  }
 
-    let allRoutes = _.map(predictions.responseJSON.data, (uu) => uu.relationships.route.data.id);
+  function getPrediction(){
+    let socket = new Socket("/socket", {params: {token: window.userToken}});
+    socket.connect();
+    var stop = parseInt(params.form.stop);
+    let channel = socket.channel("prediction:"+ stop, {});
+  
+    channel.join()
+                .receive("ok", resp => { getView(resp)})
+                .receive("error", resp => { console.log("Unable to join", resp)});
+
+    let allRoutes = _.map(params.form.predictions, (uu) => uu.relationships.route.data.id);
     console.log(allRoutes);
     let destinations = _.map(allRoutes, (uu) => api.getTripDestination(uu).responseJSON.data[0].attributes.headsign);
     console.log(destinations);
@@ -80,8 +89,8 @@ function DestinationForm(params) {
 
   let stopsavailable = _.map(params.form.stops, (uu) => <option key={uu.id} value={uu.id}>{uu.attributes.name}</option>);
   let predictions = _.map(params.form.predictions, (uu) => <tr key={uu.id}><td>{uu.relationships.route.data.id}</td>
-<td>{api.getTripDestination(uu.relationships.route.data.id).responseJSON.data[0].attributes.headsign}</td>
-<td>{formatDate(uu.attributes.arrival_time)}</td></tr>);
+  <td>{api.getTripDestination(uu.relationships.route.data.id).responseJSON.data[0].attributes.headsign}</td>
+  <td>{formatDate(uu.attributes.arrival_time)}</td></tr>);
 
   return <div>
       <FormGroup>
