@@ -1,9 +1,12 @@
 defmodule BustrackerWeb.PredictionChannel do
   use BustrackerWeb, :channel
 
-  def join("prediction:*", payload, socket) do
+  alias Bustracker.Prediction
+
+  def join("prediction:" <> stop, payload, socket) do
     if authorized?(payload) do
-      {:ok, socket}
+      predictions = Prediction.get_prediction(stop)
+      {:ok ,  %{"join" => stop, "predictions" => predictions}, socket}
     else
       {:error, %{reason: "unauthorized"}}
     end
@@ -11,8 +14,9 @@ defmodule BustrackerWeb.PredictionChannel do
 
   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
-  def handle_in("ping", payload, socket) do
-    {:reply, {:ok, payload}, socket}
+  def handle_in("callpredictions", %{"stop" => stop}, socket) do\
+    predictions = Prediction.get_prediction(stop)
+    {:reply, {:ok, %{ "predictions" => predictions}}, socket}
   end
 
   # It is also common to receive messages from the client and
@@ -26,4 +30,5 @@ defmodule BustrackerWeb.PredictionChannel do
   defp authorized?(_payload) do
     true
   end
+
 end

@@ -15,6 +15,21 @@ class TheServer {
     });
   }
 
+  register_user(data) {
+    $.ajax("/api/v1/users", {
+      method: "post",
+      dataType: "json",
+      contentType: "application/json; charset=UTF-8",
+      data: JSON.stringify({ token: data.token, user: data }),
+      success: (resp) => {
+        store.dispatch({
+          type: 'REGISTER_USER',
+          user: resp.data,
+        });
+      },
+    });
+  }
+
   request_users() {
     $.ajax("/api/v1/users", {
       method: "get",
@@ -132,7 +147,7 @@ getSchedule(routeID,tripID) {
   var newdata = $.ajax({
    type: 'GET',
    async: false,
-   url: 'https://api-v3.mbta.com/predictions?filter%5Broute%5D='+routeID+'&filter%5Btrip%5D='+ tripID,
+   url: 'https://api-v3.mbta.com/predictions?page%5Blimit%5D=30&filter%5Broute%5D='+routeID+'&filter%5Btrip%5D='+ tripID,
    data: {
      'response-format': "jsonp",
      'api-key': '0119e1c013dd48009e5fddae784c2ed4',

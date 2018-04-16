@@ -47,12 +47,15 @@ function users(state = [], action) {
   switch (action.type) {
   case 'USERS_LIST':
     return [...action.users];
+  case 'REGISTER_USER':
+    return [action.user, ...state];
   default:
     return state;
   }
 }
 
 let empty_form = {
+  name: "",
   user_id: "",
   location: "",
   stops: "",
