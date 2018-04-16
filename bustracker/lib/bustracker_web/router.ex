@@ -17,7 +17,6 @@ defmodule BustrackerWeb.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
-    get "/findbuses", PageController, :index
     get "/register", PageController, :index
     get "/schedule/", PageController, :index
   end

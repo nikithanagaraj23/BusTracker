@@ -10,6 +10,38 @@ import {Socket} from "phoenix";
 
 function DestinationForm(params) {
 
+  function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+        console.log("Geolocation is not supported by this browser.");
+    }
+  }
+
+function showPosition(position) {
+    console.log("Latitude: " , position.coords.latitude ,
+    "Longitude: " , position.coords.longitude);
+    getaddress(position.coords.latitude,position.coords.longitude)
+}
+
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            console.log("User denied the request for Geolocation.");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            console.log("Location information is unavailable.");
+            break;
+        case error.TIMEOUT:
+            console.log("The request to get user location timed out.");
+            break;
+        case error.UNKNOWN_ERROR:
+            console.log("An unknown error occurred.");
+            break;
+    }
+}
+
+
   function getaddress(lat, lon){
     fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + lat + ',' + lon + '&key=' + 'AIzaSyDs3GeKIvLr4uKv4ChTRx10ktEUzh4WAvY')
           .then((response) => response.json())
@@ -109,7 +141,7 @@ function DestinationForm(params) {
             getCurrentPosition
           }) =>
             <div id="location-details">
-              <Autocomplete id="addr" name="location" placeholder="Enter your current location" value={params.form.location} onChange={fetchStops} style={{width:"90%"}}
+              <Autocomplete className="form-control" id="addr" name="location" value={params.form.location ? params.form.location : getLocation()} onChange={fetchStops} style={{width:"90%"}}
                 onPlaceSelected={(place) => {
                   getaddress(place.geometry.location.lat(), place.geometry.location.lng())
                 }}
@@ -126,6 +158,7 @@ function DestinationForm(params) {
          </Input>
      </FormGroup>
     <Button onClick={getBuses}> Find Buses</Button>
+    <Button onClick={getLocation}> location</Button>
     <Button onClick={getPrediction}> Get Predictions </Button>
     <div>{predictions}</div>
   </div>;

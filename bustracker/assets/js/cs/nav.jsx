@@ -1,6 +1,6 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { Form, FormGroup, NavItem, Input, Button } from 'reactstrap';
+import { NavLink , Link} from 'react-router-dom';
+import { Form, FormGroup, NavItem, Input, Button} from 'reactstrap';
 import { connect } from 'react-redux';
 import api from '../api';
 
@@ -29,7 +29,7 @@ let LoginForm = connect(({login}) => {return {login};})((props) => {
         <Input type="password" name="pass" placeholder="password"
                value={props.login.pass} onChange={update} />
       </FormGroup>
-      <Button onClick={create_token}>Log In</Button>
+      <Link to={'/'} className="btn btn-primary" onClick={create_token}>Log In</Link>
     </Form>
   </div>;
 });
@@ -66,10 +66,7 @@ function Nav(props) {
         </span>
         <ul className="navbar-nav mr-auto">
           <NavItem>
-            <NavLink to="/" exact={true} activeClassName="active" className="nav-link">Feed</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink to="/findbuses"  href="#" className="nav-link">Find Buses</NavLink>
+            <NavLink to="/"  href="#" className="nav-link">Find Buses</NavLink>
           </NavItem>
         </ul>
         <Session token={token} />;

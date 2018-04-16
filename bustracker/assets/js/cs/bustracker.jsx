@@ -23,7 +23,7 @@ let Bustracker = connect((state) => state)((props) =>  {
       <Router>
         <div>
           <Nav />
-          <Route path="/findbuses" exact={true}  render={() =>
+          <Route path="/" exact={true}  render={() =>
              <DestinationForm  />
            } />
          <Route path="/schedule"   render={() =>
