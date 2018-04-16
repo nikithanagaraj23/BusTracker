@@ -28,7 +28,8 @@ function Schedule(params) {
       return result;
   }
 
-  let schedules = _.map(schedule.responseJSON.data, (uu) => <div>
+  let schedules = _.map(schedule.responseJSON.data, (uu) =>
+    <div key={uu.id}>
     {api.getStopName(uu.relationships.stop.data.id).responseJSON.data.attributes.name} {formatDate(uu.attributes.departure_time)}
     </div>);
 
