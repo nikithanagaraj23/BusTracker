@@ -4,6 +4,26 @@ import { Form, FormGroup, NavItem, Input, Button } from 'reactstrap';
 import { connect } from 'react-redux';
 import api from '../api';
 
+import { GoogleLogin, GoogleLogout } from 'react-google-login';
+
+
+const responseGoogle = (response) => {
+  console.log("Response google ID:",response.profileObj.googleId)
+  console.log("Response Token:",response.tokenId)
+  window.localStorage.setItem("googletoken", response.tokenId);
+  window.localStorage.setItem("googleuser_id", response.profileObj.givenName);
+  console.log("responseGoogle",response);
+  window.location.reload();
+}
+
+
+const logout = (response) => {
+ console.log(response);
+ localStorage.clear();
+ window.location.reload();
+}
+
+
 let LoginForm = connect(({login}) => {return {login};})((props) => {
   function update(ev) {
     let tgt = $(ev.target);
@@ -21,6 +41,9 @@ let LoginForm = connect(({login}) => {return {login};})((props) => {
 
   return <div className="navbar-text">
     <Form inline>
+      <FormGroup>
+
+      </FormGroup>
       <FormGroup>
         <Input type="text" name="name" placeholder="name"
                value={props.login.name} onChange={update} />
@@ -73,6 +96,19 @@ function Nav(props) {
           <NavItem>
             <NavLink to="/findbuses"  href="#" className="nav-link">Find Buses</NavLink>
           </NavItem>
+          <NavItem>
+          <GoogleLogin
+                clientId="209682923125-1njg0h2p8kmd90qfhd0gk3nj7kn0m3fh.apps.googleusercontent.com"
+                buttonText="Login"
+                onSuccess={responseGoogle}
+                onFailure={responseGoogle}/>
+          </NavItem>
+          <NavItem>
+          <GoogleLogout
+              buttonText="Logout"
+              onLogoutSuccess={logout}>
+          </GoogleLogout>
+          </NavItem>
         </ul>
 
         <Session token={token} />;
@@ -88,6 +124,19 @@ function Nav(props) {
         <ul className="navbar-nav mr-auto">
           <NavItem>
               <NavLink to="/register" href="#" className="nav-link">Register</NavLink>
+          </NavItem>
+          <NavItem>
+          <GoogleLogin
+                clientId="209682923125-1njg0h2p8kmd90qfhd0gk3nj7kn0m3fh.apps.googleusercontent.com"
+                buttonText="Login"
+                onSuccess={responseGoogle}
+                onFailure={responseGoogle}/>
+          </NavItem>
+          <NavItem>
+          <GoogleLogout
+              buttonText="Logout"
+              onLogoutSuccess={logout}>
+          </GoogleLogout>
           </NavItem>
         </ul>
         <LoginForm />
