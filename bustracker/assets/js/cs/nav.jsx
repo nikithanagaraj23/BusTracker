@@ -42,20 +42,19 @@ let Session = connect(({token}) => {return {token};})((props) => {
   }
 
   return <div className="navbar-text">
-    <span className="login"> Logged in as User ID { window.localStorage.getItem("user_id") } </span>
+    <span className="login"> Welcome { window.localStorage.getItem("user_id") } </span>
     <Button className="btn-primary" onClick={log_out}>Log Out</Button>
   </div>;
 });
 
 function Nav(props) {
-
   var tok = window.localStorage.getItem("token");
   var uid = window.localStorage.getItem("user_id");
   var token = {"user_id": uid, "token": tok};
 
   if(props.token){
     window.localStorage.setItem("token", props.token.token);
-    window.localStorage.setItem("user_id", props.token.user_id);
+    window.localStorage.setItem("user_id", props.login.name);
   }
 
   if (props.token || tok) {
@@ -93,6 +92,7 @@ function Nav(props) {
 function state2props(state) {
   return {
     token: state.token,
+    login: state.login
   };
 }
 

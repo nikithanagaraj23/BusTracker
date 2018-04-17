@@ -18,7 +18,8 @@ function RegisterForm(props) {
   }
 
   function submit(ev) {
-    var reg_form = {name: props.form.name, password: props.form.password}
+    var reg_form = {name: props.form.name, password: props.form.password,
+                    password_confirmation: props.form.password_confirmation}
     api.register_user(reg_form);
     document.getElementById("regForm").className = "hidden";
     alert("You have successfully registered. Please login to use Task Tracker!!");
@@ -37,6 +38,9 @@ function RegisterForm(props) {
     </FormGroup>
     <FormGroup>
       <Input className="form-control" type="password" name="password" onChange={update} placeholder="Enter your password" />
+    </FormGroup>
+    <FormGroup>
+      <Input className="form-control" type="password" name="password_confirmation" onChange={update} placeholder="Confirm your password" />
     </FormGroup>
     <Button onClick={submit} color="primary">Register</Button> &nbsp;
     <Button onClick={clear}>Clear</Button>

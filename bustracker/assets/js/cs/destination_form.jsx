@@ -172,7 +172,7 @@ function showError(error) {
             getCurrentPosition
           }) =>
             <div id="location-details">
-              <Autocomplete className="form-control" id="addr" name="location" value={params.form.location  ? params.form.location : getLocation()}
+              <Autocomplete className="form-control" id="addr" name="location" value={params.form.location || getLocation()}
                 onPlaceSelected={(place) => {
                   getaddress(place.geometry.location.lat(), place.geometry.location.lng())
                 }}
