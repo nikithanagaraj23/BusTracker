@@ -26,7 +26,17 @@ class TheServer {
           type: 'REGISTER_USER',
           user: resp.data,
         });
+        document.getElementById("regForm").className = "hidden";
+        alert("You have successfully registered. Please login to use Task Tracker!!");
       },
+      error: function(err) {
+        if(err.responseJSON.errors.password_confirmation){
+          alert(err.responseJSON.errors.password_confirmation);
+        }
+        else {
+          alert(err.responseJSON.errors.password);
+        }
+      }
     });
   }
 
@@ -73,56 +83,6 @@ class TheServer {
      },
    });
  }
-
- getBuses() {
-   let routeID = []
-   $.ajax({
-    type: 'GET',
-    url: 'https://api-v3.mbta.com/routes?filter%5Btype%5D=03',
-    data: {
-      'response-format': "jsonp",
-      'api-key': '0119e1c013dd48009e5fddae784c2ed4',
-    },
-    success: function(data) {
-      console.log("Route ID:",data.data.length);
-      var i=0;
-      for (i = 0; i < data.data.length; ++i) {
-        routeID[i] = data.data[i].id;
-      }
-    },
-    error: function(err) {
-      console.log('error:' + err)
-    }
-  });
-  console.log("All Route IDS: ",routeID)
-}
-
-getStopsForRouteID(routeID){
-  let stopID = []
-  console.log("Route ID from getStops: ",routeID)
-  $.ajax({
-   type: 'GET',
-   url: 'https://api-v3.mbta.com/stops?filter%5Broute%5D='+routeID,
-   data: {
-     'response-format': "jsonp",
-     'api-key': '0119e1c013dd48009e5fddae784c2ed4',
-   },
-   success: function(data) {
-     console.log("Stop ID length:",data.data.length);
-     var i=0;
-     for (i = 0; i < data.data.length; ++i) {
-       stopID[i] = data.data[i].id;
-       console.log("StopIDs:",data.data[i].id)
-     }
-   },
-   error: function(err) {
-     console.log('error:' + err)
-   }
- });
- console.log("Route ID: "+routeID+"Stop IDS:"+stopID)
-  return stopID
-}
-
 
 getStopName(stopID) {
   var newdata = $.ajax({
@@ -200,27 +160,6 @@ getRouteShape(routeID) {
  });
  return newdata;
 }
-
-
-getPrediction(stopID) {
-  var newdata = $.ajax({
-   type: 'GET',
-   async: false,
-   url: 'https://api-v3.mbta.com/predictions?filter%5Bstop%5D='+ stopID,
-   data: {
-     'response-format': "jsonp",
-     'api-key': '0119e1c013dd48009e5fddae784c2ed4',
-   },
-   success: function(data) {
-     console.log("Predictions received",data);
-   },
-   error: function(err) {
-     console.log('error:' + err)
-   }
- });
- return newdata;
-}
-
 
 
 getStopIDs(latitude,longitude){
