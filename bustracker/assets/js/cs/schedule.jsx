@@ -15,9 +15,50 @@ function Schedule(params) {
   var routeID = query[0].split("=")[1];
   var tripID = query[1].split("=")[1];
 
-  console.log("trips and routes",routeID,tripID);
+  function google_map(){
+    let routeShape = api.getRouteShape(routeID);
+    var polyline = routeShape.responseJSON.data[0].attributes.polyline;
+    var decodedPath = google.maps.geometry.encoding.decodePath(polyline);
+    var decodedLevels = decodeLevels("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+    var myLatlng = new google.maps.LatLng(decodedPath[0].lat(), decodedPath[0].lng());
+    var myOptions = {
+        zoom: 15,
+        center: myLatlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    $('#map').css("height", "100%");
+    var map = new google.maps.Map(document.getElementById("map"), myOptions);
+    var markerDest = new google.maps.Marker({
+           position: {lat: decodedPath[0].lat(), lng: decodedPath[0].lng()},
+           icon: '/images/MapMarker.png',
+           map: map,
+         });
+    var markerStart = new google.maps.Marker({
+        position: {lat: decodedPath[decodedPath.length-1].lat(), lng: decodedPath[decodedPath.length-1].lng()},
+        map: map,
+        });
+    var setRegion = new google.maps.Polyline({
+        path: decodedPath,
+        levels: decodedLevels,
+        strokeColor: "#0AC2FF",
+        strokeOpacity: 1.0,
+        strokeWeight: 5,
+        map: map
+    });
+}
+
+function decodeLevels(encodedLevelsString) {
+    var decodedLevels = [];
+
+    for (var i = 0; i < encodedLevelsString.length; ++i) {
+        var level = encodedLevelsString.charCodeAt(i) - 63;
+        decodedLevels.push(level);
+    }
+    return decodedLevels;
+  }
+
+  google_map();
   let schedule = api.getSchedule(routeID,tripID);
-  console.log(schedule.responseJSON.data);
 
   function formatDate(time){
       var dt = new Date(time);

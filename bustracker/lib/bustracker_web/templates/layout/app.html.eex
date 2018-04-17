@@ -29,6 +29,6 @@
 
     </div> <!-- /container -->
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDs3GeKIvLr4uKv4ChTRx10ktEUzh4WAvY&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDs3GeKIvLr4uKv4ChTRx10ktEUzh4WAvY&libraries=places,geometry&amp;sensor=false"></script>
   </body>
 </html>
