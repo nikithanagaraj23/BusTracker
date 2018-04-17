@@ -12,8 +12,8 @@ config :logger, level: :warn
 # Configure your database
 config :bustracker, Bustracker.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  username: "bustracker",
+  password: "bustracker",
   database: "bustracker_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox

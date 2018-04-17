@@ -19,7 +19,8 @@ export default function bustracker_init(store) {
 
 let Bustracker = connect((state) => state)((props) =>  {
   var token =  localStorage.getItem("token");
-  if(props.token || token){
+  var token2 =  localStorage.getItem("googletoken");
+  if(props.token || token || token2){
     return (
       <Router>
         <div>

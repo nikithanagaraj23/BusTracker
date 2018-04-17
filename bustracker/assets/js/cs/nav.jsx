@@ -4,6 +4,26 @@ import { Form, FormGroup, NavItem, Input, Button} from 'reactstrap';
 import { connect } from 'react-redux';
 import api from '../api';
 
+import { GoogleLogin, GoogleLogout } from 'react-google-login';
+
+
+const responseGoogle = (response) => {
+  console.log("Response google ID:",response.profileObj.googleId)
+  console.log("Response Token:",response.tokenId)
+  window.localStorage.setItem("googletoken", response.tokenId);
+  window.localStorage.setItem("googleuser_id", response.profileObj.givenName);
+  console.log("responseGoogle",response);
+  window.location.reload();
+}
+
+
+const logout = (response) => {
+ console.log(response);
+ localStorage.clear();
+ window.location.reload();
+}
+
+
 let LoginForm = connect(({login}) => {return {login};})((props) => {
   function update(ev) {
     let tgt = $(ev.target);
@@ -30,6 +50,12 @@ let LoginForm = connect(({login}) => {return {login};})((props) => {
                value={props.login.pass} onChange={update} />
       </FormGroup>
       <Link to={'/'} className="btn btn-primary" onClick={create_token}>Log In</Link>
+        <GoogleLogin
+            className="google-signin"
+              clientId="209682923125-1njg0h2p8kmd90qfhd0gk3nj7kn0m3fh.apps.googleusercontent.com"
+              buttonText=""
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}/>
     </Form>
   </div>;
 });
@@ -51,13 +77,14 @@ function Nav(props) {
   var tok = window.localStorage.getItem("token");
   var uid = window.localStorage.getItem("user_id");
   var token = {"user_id": uid, "token": tok};
+  var tok1 = window.localStorage.getItem("googletoken");
 
   if(props.token){
     window.localStorage.setItem("token", props.token.token);
     window.localStorage.setItem("user_id", props.login.name);
   }
 
-  if (props.token || tok) {
+  if (props.token || tok || tok1) {
     return (
       <nav className="navbar navbar-dark bg-dark navbar-expand ">
         <span className="navbar-brand">
@@ -68,6 +95,7 @@ function Nav(props) {
             <NavLink to="/"  href="#" className="nav-link">Find Buses</NavLink>
           </NavItem>
         </ul>
+
         <Session token={token} />;
       </nav>
     );

@@ -45,6 +45,8 @@ defmodule Bustracker.Mixfile do
       {:argon2_elixir, "~> 1.2"},
       {:httpoison, "~> 0.13"},
       {:poison, "~> 3.1"},
+      {:ueberauth, "~> 0.4"},
+      {:ueberauth_google, "~> 0.5"},
     ]
   end
 
