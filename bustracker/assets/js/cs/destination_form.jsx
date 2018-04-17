@@ -10,6 +10,7 @@ import {Socket} from "phoenix";
 
 
 function DestinationForm(params) {
+
   function google_map(lat, lng){
     console.log("LAT", lat, "LONG", lng);
     var map = new google.maps.Map(document.getElementById('map'), {
@@ -81,8 +82,6 @@ function showError(error) {
               google_map(lat, lon);
   })
 
-
-  let allRoutes = getBuses();
   let allStops = api.getStopIDs(lat,lon);
   let data = {};
   data['stops'] = allStops.responseJSON.data;
@@ -107,14 +106,6 @@ function showError(error) {
     params.dispatch(action);
   }
 
-  function getBuses(){
-    api.getBuses();
-  }
-
-  function getStopsRouteID(){
-    api.getStopsForRouteID(43)
-  }
-
   function getView(data2){
     let predictions = data2["predictions"];
     let data = {};
@@ -131,11 +122,11 @@ function showError(error) {
     let socket = new Socket("/socket", {params: {token: window.userToken}});
     socket.connect();
     var stop = parseInt(params.form.stop);
+    console.log(stop);
     let channel = socket.channel("prediction:"+ stop, {});
     channel.join()
-                .receive("ok", resp => { getView(resp)})
-                .receive("error", resp => { console.log("Unable to join", resp)});
-
+               .receive("ok", resp => { getView(resp)})
+               .receive("error", resp => { console.log("Unable to join", resp)});
     let allRoutes = _.map(params.form.predictions, (uu) => uu.relationships.route.data.id);
     console.log(allRoutes);
     let destinations = _.map(allRoutes, (uu) => api.getTripDestination(uu).responseJSON.data[0].attributes.headsign);
