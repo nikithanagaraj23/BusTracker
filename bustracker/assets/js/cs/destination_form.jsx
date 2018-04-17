@@ -27,6 +27,7 @@ function DestinationForm(params) {
   }
 
   function getLocation() {
+    console.log("waiting");
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition, showError);
     } else {
@@ -35,13 +36,9 @@ function DestinationForm(params) {
   }
 
 function showPosition(position) {
-    console.log("Latitude: " , position.coords.latitude ,
-    "Longitude: " , position.coords.longitude);
-    if(!$("input[name=location]")){
-      getaddress(position.coords.latitude,position.coords.longitude);
-    }
-
-    //google_map(position.coords.latitude,position.coords.longitude);
+  console.log("Latitude: " , position.coords.latitude ,
+  "Longitude: " , position.coords.longitude);
+  getaddress(position.coords.latitude,position.coords.longitude);
 }
 
 function showError(error) {
@@ -152,11 +149,22 @@ function showError(error) {
       return result;
   }
 
+  function updateRoute(routeID,tripID){
+    let data = {};
+    data['routeID'] = routeID;
+    data['tripID'] = tripID;
+    let action = {
+      type: 'UPDATE_FORM',
+      data: data,
+    };
+    params.dispatch(action);
+  }
+
   let stopsavailable = _.map(params.form.stops, (uu) => <option key={uu.id} value={uu.id}>{uu.attributes.name}</option>);
-  let predictions = _.map(params.form.predictions, (uu) => <div><Link key={uu.id} to={'/schedule/route='+uu.relationships.route.data.id+'&trip='+uu.relationships.trip.data.id}>
-  {uu.relationships.route.data.id}
-{api.getTripDestination(uu.relationships.route.data.id).responseJSON.data[0].attributes.headsign}
-{formatDate(uu.attributes.arrival_time)}</Link></div>);
+  let predictions = _.map(params.form.predictions, (uu) => <div><Link className="row" key={uu.id} to={'/schedule/route='+uu.relationships.route.data.id+'&trip='+uu.relationships.trip.data.id}>
+  <div className="col-md-2"><span className="bus-number">{uu.relationships.route.data.id}</span></div>
+  <span className="destination-name col-md-5">{api.getTripDestination(uu.relationships.route.data.id).responseJSON.data[0].attributes.headsign}</span>
+  <span className="bus-time col-md-4">{formatDate(uu.attributes.arrival_time)}</span></Link></div>);
 
   return <div className="find-buses col-md-10">
     <h5>Let  your current location to load or<br></br> Enter the location from where you want to catch your bus</h5>
@@ -170,7 +178,7 @@ function showError(error) {
             getCurrentPosition
           }) =>
             <div id="location-details">
-              <Autocomplete className="form-control" id="addr" name="location" value={params.form.location  ? params.form.location : getLocation()}
+              <Autocomplete className="form-control" id="addr" name="location" value={params.form.location ? params.form.location : getLocation()} onChange={fetchStops}
                 onPlaceSelected={(place) => {
                   getaddress(place.geometry.location.lat(), place.geometry.location.lng())
                 }}
@@ -186,7 +194,7 @@ function showError(error) {
          </Input>
      </FormGroup>
     <Button onClick={getPrediction}> Get Predictions </Button>
-    <div>{predictions}</div>
+    <div className="predictions">{predictions}</div>
   </div>;
 }
 

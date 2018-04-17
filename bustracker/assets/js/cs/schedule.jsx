@@ -14,11 +14,8 @@ function Schedule(params) {
   var query = url.substring(url.lastIndexOf('/')+1).split("&");
   var routeID = query[0].split("=")[1];
   var tripID = query[1].split("=")[1];
-
-  console.log("trips and routes",routeID,tripID);
+  let data = {};
   let schedule = api.getSchedule(routeID,tripID);
-  console.log(schedule.responseJSON.data);
-
   function formatDate(time){
       var dt = new Date(time);
       var t = dt.toLocaleTimeString();
@@ -29,11 +26,12 @@ function Schedule(params) {
   }
 
   let schedules = _.map(schedule.responseJSON.data, (uu) =>
-    <div key={uu.id}>
-    {api.getStopName(uu.relationships.stop.data.id).responseJSON.data.attributes.name} {formatDate(uu.attributes.departure_time)}
+    <div key={uu.id} className="row">
+    <span className="col-md-7">{api.getStopName(uu.relationships.stop.data.id).responseJSON.data.attributes.name} </span><span className="col-md-3">{formatDate(uu.attributes.departure_time)}</span>
     </div>);
 
-  return<div>
+  return<div className="trip-schedule">
+    <h4>List of Schedules</h4>
     {schedules}
   </div>;
 }

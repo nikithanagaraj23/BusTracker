@@ -43,7 +43,7 @@ let Session = connect(({token}) => {return {token};})((props) => {
 
   return <div className="navbar-text">
     <span className="login"> Logged in as User ID { window.localStorage.getItem("user_id") } </span>
-    <Button className="btn-primary" onClick={log_out}>Log Out</Button>
+    <Link className="btn btn-primary" onClick={log_out} to={'/'}>Log Out</Link>
   </div>;
 });
 

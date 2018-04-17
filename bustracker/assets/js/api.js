@@ -134,7 +134,7 @@ getStopName(stopID) {
      'api-key': '0119e1c013dd48009e5fddae784c2ed4',
    },
    success: function(data) {
-     console.log("stop name received",data);
+     // console.log("stop name received",data);
    },
    error: function(err) {
      console.log('error:' + err)

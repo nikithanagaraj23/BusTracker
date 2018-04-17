@@ -31,7 +31,7 @@ let Bustracker = connect((state) => state)((props) =>  {
              } />
          </div>
          <div>
-           <Route path="/schedule"   render={() =>
+           <Route path="/schedule" render={() =>
                 <Schedule  />
               } />
         </div>
