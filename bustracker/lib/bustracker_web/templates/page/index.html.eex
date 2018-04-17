@@ -11,24 +11,5 @@
     <div id="root">
           <p>React app not loaded...</p>
     </div>
-
-    <!-- <div class="pac-card" id="pac-card">
-      <div>
-        <div id="title">
-          Autocomplete search
-        </div>
-      </div>
-      <div id="pac-container">
-        <input id="pac-input" type="text"
-            placeholder="Enter a location">
-      </div>
-    </div>
-    <div id="map" style="height:800px"></div>
-    <div id="infowindow-content">
-      <img src="" width="16" height="16" id="place-icon">
-      <span id="place-name"  class="title"></span><br>
-      <span id="place-address"></span>
-    </div> -->
-
   </body>
 </html>

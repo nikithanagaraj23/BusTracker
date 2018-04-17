@@ -30,15 +30,13 @@ function RegisterForm(props) {
     });
   }
 
-  return <div id="regForm" style={{padding: "4ex"}}>
-    <h2>Register</h2>
+  return <div id="regForm" >
+    <h3>Register</h3>
     <FormGroup>
-      <Label for="name">Enter the user name</Label>
-      <Input type="text" name="name" value={props.form.name} onChange={update} />
+      <Input className="form-control" type="text" name="name" value={props.form.name} onChange={update} placeholder="Enter the user name" />
     </FormGroup>
     <FormGroup>
-      <Label for="password">Enter your password</Label>
-      <Input type="password" name="password" onChange={update} />
+      <Input className="form-control" type="password" name="password" onChange={update} placeholder="Enter your password" />
     </FormGroup>
     <Button onClick={submit} color="primary">Register</Button> &nbsp;
     <Button onClick={clear}>Clear</Button>

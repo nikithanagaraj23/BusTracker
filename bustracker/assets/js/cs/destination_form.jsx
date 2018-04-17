@@ -9,6 +9,22 @@ import Geolocation from "react-geolocation";
 import {Socket} from "phoenix";
 
 function DestinationForm(params) {
+  function google_map(lat, lng){
+    console.log("LAT", lat, "LONG", lng);
+    var map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: lat, lng: lng},
+      zoom: 15
+    });
+    $('#map').css("height", "100%");
+    var marker = new google.maps.Marker({
+           position: {lat: lat, lng: lng},
+           map: map,
+         });
+  }
+
+  if(!params.form.stops) {
+    google_map(42.338643499999996, -71.0882297);
+  }
 
   function getLocation() {
     if (navigator.geolocation) {
@@ -21,7 +37,11 @@ function DestinationForm(params) {
 function showPosition(position) {
     console.log("Latitude: " , position.coords.latitude ,
     "Longitude: " , position.coords.longitude);
-    getaddress(position.coords.latitude,position.coords.longitude)
+    if(!$("input[name=location]")){
+      getaddress(position.coords.latitude,position.coords.longitude);
+    }
+
+    //google_map(position.coords.latitude,position.coords.longitude);
 }
 
 function showError(error) {
@@ -48,6 +68,16 @@ function showError(error) {
           .then((responseJson) => {
               var address = responseJson.results[0].formatted_address;
               document.getElementById("addr").value = address;
+              let data = {};
+              if($("input[name=location]")){
+                data['location'] = $("input[name=location]").val();
+              }
+              let action = {
+                type: 'UPDATE_FORM',
+                data: data,
+              };
+              params.dispatch(action);
+              google_map(lat, lon);
   })
 
   let allRoutes = getBuses();
@@ -96,12 +126,10 @@ function showError(error) {
   }
 
   function getPrediction(){
-
     let socket = new Socket("/socket", {params: {token: window.userToken}});
     socket.connect();
     var stop = parseInt(params.form.stop);
     let channel = socket.channel("prediction:"+ stop, {});
-
     channel.join()
                 .receive("ok", resp => { getView(resp)})
                 .receive("error", resp => { console.log("Unable to join", resp)});
@@ -130,7 +158,8 @@ function showError(error) {
 {api.getTripDestination(uu.relationships.route.data.id).responseJSON.data[0].attributes.headsign}
 {formatDate(uu.attributes.arrival_time)}</Link></div>);
 
-  return <div>
+  return <div className="find-buses col-md-10">
+    <h5>Let  your current location to load or<br></br> Enter the location from where you want to catch your bus</h5>
       <FormGroup>
         <Geolocation
           onSuccess={console.log}
@@ -141,7 +170,7 @@ function showError(error) {
             getCurrentPosition
           }) =>
             <div id="location-details">
-              <Autocomplete className="form-control" id="addr" name="location" value={params.form.location ? params.form.location : getLocation()} onChange={fetchStops} style={{width:"90%"}}
+              <Autocomplete className="form-control" id="addr" name="location" value={params.form.location  ? params.form.location : getLocation()}
                 onPlaceSelected={(place) => {
                   getaddress(place.geometry.location.lat(), place.geometry.location.lng())
                 }}
@@ -150,15 +179,12 @@ function showError(error) {
             </div>}
         />
     </FormGroup>
-    <Button onClick={fetchStops}> Fetch Stops</Button>
     <FormGroup>
-       <Label for="stops">Stops</Label>
-         <Input type="select" name="stop" value={params.form.stop} onChange={fetchStops} >
+         <Input type="select" className="form-control" name="stop" value={params.form.stop} onChange={fetchStops} >
+           <option value="" selected disabled hidden>Choose here</option>
            {stopsavailable}
          </Input>
      </FormGroup>
-    <Button onClick={getBuses}> Find Buses</Button>
-    <Button onClick={getLocation}> location</Button>
     <Button onClick={getPrediction}> Get Predictions </Button>
     <div>{predictions}</div>
   </div>;

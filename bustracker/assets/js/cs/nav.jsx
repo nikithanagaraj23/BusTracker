@@ -20,13 +20,13 @@ let LoginForm = connect(({login}) => {return {login};})((props) => {
   }
 
   return <div className="navbar-text">
-    <Form inline>
+    <Form inline className="navbar-login">
       <FormGroup>
-        <Input type="text" name="name" placeholder="name"
+        <Input className="form-control" type="text" name="name" placeholder="User Name" autocomplete="none"
                value={props.login.name} onChange={update} />
       </FormGroup>
       <FormGroup>
-        <Input type="password" name="pass" placeholder="password"
+        <Input  className="form-control" type="password" name="pass" placeholder="Password" autocomplete="none"
                value={props.login.pass} onChange={update} />
       </FormGroup>
       <Link to={'/'} className="btn btn-primary" onClick={create_token}>Log In</Link>
@@ -60,7 +60,7 @@ function Nav(props) {
 
   if (props.token || tok) {
     return (
-      <nav className="navbar navbar-dark bg-dark navbar-expand">
+      <nav className="navbar navbar-dark bg-dark navbar-expand ">
         <span className="navbar-brand">
           Bustracker
         </span>
