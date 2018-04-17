@@ -20,6 +20,14 @@ defmodule BustrackerWeb.Router do
     get "/findbuses", PageController, :index
     get "/register", PageController, :index
     get "/schedule/", PageController, :index
+
+  end
+
+  scope "/auth", BustrackerWeb do
+    pipe_through :browser
+
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :new
   end
 
   # Other scopes may use custom stacks.

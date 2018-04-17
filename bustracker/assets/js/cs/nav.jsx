@@ -29,6 +29,7 @@ let LoginForm = connect(({login}) => {return {login};})((props) => {
         <Input type="password" name="pass" placeholder="password"
                value={props.login.pass} onChange={update} />
       </FormGroup>
+
       <Button onClick={create_token}>Log In</Button>
     </Form>
   </div>;
@@ -42,7 +43,7 @@ let Session = connect(({token}) => {return {token};})((props) => {
   }
 
   return <div className="navbar-text">
-    <span className="login"> Logged in as User ID { window.localStorage.getItem("user_id") } </span>
+    <span className="login"> Logged in as User ID { window.localStorage.getItem("user_id") ||  window.localStorage.getItem("googleuser_id")} </span>
     <Button className="btn-primary" onClick={log_out}>Log Out</Button>
   </div>;
 });
@@ -52,13 +53,14 @@ function Nav(props) {
   var tok = window.localStorage.getItem("token");
   var uid = window.localStorage.getItem("user_id");
   var token = {"user_id": uid, "token": tok};
+  var tok1 = window.localStorage.getItem("googletoken");
 
   if(props.token){
     window.localStorage.setItem("token", props.token.token);
     window.localStorage.setItem("user_id", props.token.user_id);
   }
 
-  if (props.token || tok) {
+  if (props.token || tok || tok1) {
     return (
       <nav className="navbar navbar-dark bg-dark navbar-expand">
         <span className="navbar-brand">
@@ -72,6 +74,7 @@ function Nav(props) {
             <NavLink to="/findbuses"  href="#" className="nav-link">Find Buses</NavLink>
           </NavItem>
         </ul>
+
         <Session token={token} />;
       </nav>
     );
