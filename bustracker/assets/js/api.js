@@ -182,6 +182,25 @@ getTripDestination(routeID) {
  return newdata;
 }
 
+getRouteShape(routeID) {
+  var newdata = $.ajax({
+   type: 'GET',
+   async: false,
+   url: 'https://api-v3.mbta.com/shapes?filter%5Broute%5D='+routeID+'&filter%5Bdirection_id%5D=1',
+   data: {
+     'response-format': "jsonp",
+     'api-key': '0119e1c013dd48009e5fddae784c2ed4',
+   },
+   success: function(data) {
+     // console.log("Trips received",data);
+   },
+   error: function(err) {
+     console.log('error:' + err)
+   }
+ });
+ return newdata;
+}
+
 
 getPrediction(stopID) {
   var newdata = $.ajax({

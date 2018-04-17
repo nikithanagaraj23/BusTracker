@@ -61,7 +61,8 @@ let empty_form = {
   stops: "",
   stop: "",
   predictions: "",
-  token: ""
+  token: "",
+  polyline: ""
 };
 
 function form(state = empty_form, action) {
