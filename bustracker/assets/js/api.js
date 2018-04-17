@@ -208,7 +208,7 @@ getStopIDs(latitude,longitude){
   var newdata = $.ajax({
    type: 'GET',
    async: false,
-   url: 'https://api-v3.mbta.com/stops?latitude='+latitude+'&longitude='+ longitude+'&radius=0.002&route_type=3',
+   url: 'https://api-v3.mbta.com/stops?latitude='+latitude+'&longitude='+ longitude+'&radius=0.003&route_type=3',
    data: {
      'response-format': "jsonp",
      'api-key': '0119e1c013dd48009e5fddae784c2ed4',

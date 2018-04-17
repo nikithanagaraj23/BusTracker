@@ -23,13 +23,19 @@ let Bustracker = connect((state) => state)((props) =>  {
     return (
       <Router>
         <div>
-          <Nav />
-          <Route path="/" exact={true}  render={() =>
-             <DestinationForm  />
-           } />
-         <Route path="/schedule"   render={() =>
-              <Schedule  />
-            } />
+          <div>
+            <Nav />
+          </div>
+          <div className="row col-md-6">
+            <Route path="/" exact={true}  render={() =>
+               <DestinationForm  />
+             } />
+         </div>
+         <div>
+           <Route path="/schedule"   render={() =>
+                <Schedule  />
+              } />
+        </div>
         </div>
       </Router>
     );
@@ -39,10 +45,16 @@ let Bustracker = connect((state) => state)((props) =>  {
       <Router>
         <div>
           <Nav />
-          <h4 className="msg"> Please login if returning user or register if new user</h4>
-           <Route path="/register" exact={true} render={() =>
-            <RegisterForm />
-          } />
+          <div className="row main-data">
+            <div className="login-msg col-md-5"> <h3>BusTracker!</h3>
+              <h5>Track where your bus is right now.</h5>
+              <p> Login to start tracking. <br></br>
+                If you don't have an account, click on Register to Sign Up</p>
+                <Route path="/register" exact={true} render={() =>
+                 <RegisterForm />
+               } />
+             </div>
+        </div>
         </div>
       </Router>
     );

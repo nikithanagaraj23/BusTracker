@@ -3,14 +3,20 @@
 @import "bootstrap";
 
 // Autocomplete stuff
-
-
+#map {
+  width:100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  box-shadow: -5px 5px 20px 3px #383434;
+}
 /* Optional: Makes the sample page fill the window. */
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
 }
+
 #description {
   font-family: Roboto;
   font-size: 15px;
@@ -96,11 +102,163 @@ html, body {
   height: 100vh;
   width: 100%;
   max-width: 100%;
-  background: linear-gradient(rgba(0, 0, 0, 0.1),rgba(0, 0, 0, 0.1)), url('/images/background.jpg');
+  background: linear-gradient(rgba(0, 0, 0, 0.3),rgba(0, 0, 0, 0.3)), url('/images/background.jpg');
   background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   padding: 0;
 }
 
 .bg-dark {
   background: #000 !important;
+}
+
+.find-buses {
+  margin: 5rem auto;
+  h5{
+    color: #bcc3ca;
+    font-weight: 200;
+    margin-bottom: 20px;
+  }
+  input,select{
+    background: none;
+    border: 1px solid #efefef;
+    margin: 15px 0px;
+    color: #bcc3ca;
+    &:focus, &:active{
+      background: none;
+      color: #bcc3ca;
+      border: 1px solid #efefef;
+    }
+  }
+  .btn{
+    background: #a41715;
+    border: #a41715;
+    margin: 10px 0px;
+    padding: 0.375rem 1.5rem;;
+    color: #bcc3ca;
+    &:focus, &:active{
+      background: #a41715;
+      border: #a41715;
+    }
+    &:hover{
+      background: #c71613;
+    }
+  }
+}
+.navbar{
+  z-index: 1;
+}
+.navbar-login {
+  input{
+    background: none;
+    border: 0;
+    box-shadow: 0 0 2px #efefef;
+    margin: 0 5px;
+    color: #bcc3ca;
+    &:focus, &:active{
+      background: none;
+      color: #bcc3ca;
+      box-shadow: 0 0 2px #efefef;
+      border: 0;
+    }
+  }
+
+  .btn{
+    background: #a41715;
+    border: #a41715;
+    margin: 0 5px;
+    padding: 0.375rem 1.5rem;;
+    &:focus, &:active{
+      background: #a41715;
+      border: #a41715;
+    }
+    &:hover{
+      background: #c71613;
+    }
+  }
+}
+
+.login-msg {
+  background: rgba(0, 0, 0, 0.8);
+  color: #bcc3ca;
+  font-size: 18px;
+  padding: 3rem;
+  border-radius: 10px;
+  h5{
+    font-weight: 100;
+    margin-bottom: 20px;
+  }
+  p{
+    font-weight: 100;
+    font-size: 16px;
+  }
+  @media screen and (max-width: 960px) {
+    margin: 0;
+    height: 100vh;
+  }
+}
+.main-data{
+  margin: 5rem;
+
+}
+#regForm{
+  margin-top: 5rem;
+  h3{
+    color: #bcc3ca;
+    font-weight: 300;
+  }
+  input{
+    background: none;
+    border: 0;
+    box-shadow: 0 0 2px #efefef;
+    margin: 20px 5px;
+    color: #bcc3ca;
+    &:focus, &:active{
+      background: none;
+      color: #bcc3ca;
+      box-shadow: 0 0 2px #efefef;
+      border: 0;
+    }
+  }
+  .btn{
+    background: #a41715;
+    border: #a41715;
+    margin: 10px 5px;
+    padding: 0.375rem 1.5rem;;
+    color: #bcc3ca;
+    &:focus, &:active{
+      background: #a41715;
+      border: #a41715;
+    }
+    &:hover{
+      background: #c71613;
+    }
+  }
+  &:before {
+    display: block;
+    content: '';
+    background: #504e4e;
+    height: 1px;
+    width: 75%;
+    margin-top: -20px;
+    margin-bottom: 45px;
+  }
+}
+
+.navbar-text {
+  .btn{
+    background: #a41715;
+    border: #a41715;
+    margin: 10px 5px;
+    padding: 0.375rem 1.5rem;;
+    color: #bcc3ca;
+    &:focus, &:active{
+      background: #a41715;
+      border: #a41715;
+    }
+    &:hover{
+      background: #c71613;
+    }
+  }
 }
