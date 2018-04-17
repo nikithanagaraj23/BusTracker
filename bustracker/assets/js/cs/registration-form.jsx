@@ -21,8 +21,6 @@ function RegisterForm(props) {
     var reg_form = {name: props.form.name, password: props.form.password,
                     password_confirmation: props.form.password_confirmation}
     api.register_user(reg_form);
-    document.getElementById("regForm").className = "hidden";
-    alert("You have successfully registered. Please login to use Task Tracker!!");
   }
 
   function clear(ev) {

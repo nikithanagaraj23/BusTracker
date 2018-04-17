@@ -26,7 +26,17 @@ class TheServer {
           type: 'REGISTER_USER',
           user: resp.data,
         });
+        document.getElementById("regForm").className = "hidden";
+        alert("You have successfully registered. Please login to use Task Tracker!!");
       },
+      error: function(err) {
+        if(err.responseJSON.errors.password_confirmation){
+          alert(err.responseJSON.errors.password_confirmation);
+        }
+        else {
+          alert(err.responseJSON.errors.password);
+        }
+      }
     });
   }
 
