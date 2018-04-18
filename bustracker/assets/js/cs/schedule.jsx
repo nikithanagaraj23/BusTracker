@@ -70,8 +70,15 @@ function decodeLevels(encodedLevelsString) {
   }
 
   let schedules = _.map(schedule.responseJSON.data, (uu) =>
-    <div key={uu.id} className="row">
-    <span className="col-md-7">{api.getStopName(uu.relationships.stop.data.id).responseJSON.data.attributes.name} </span><span className="col-md-3">{formatDate(uu.attributes.departure_time)}</span>
+    <div key={uu.id} >
+    {uu.relationships.stop.data.id == params.form.stop ? <div className="row"><img className="col-2" src="/images/red_car.png" />
+    <span className="col-7">{api.getStopName(uu.relationships.stop.data.id).responseJSON.data.attributes.name} </span>
+    <span className="col-3">{formatDate(uu.attributes.departure_time)}</span></div>:
+    <div className="row">
+    <span className="offset-2 col-7">{api.getStopName(uu.relationships.stop.data.id).responseJSON.data.attributes.name} </span>
+    <span className="col-3">{formatDate(uu.attributes.departure_time)}</span>
+    </div>
+    }
     </div>);
 
   return<div className="trip-schedule">

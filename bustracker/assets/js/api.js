@@ -81,6 +81,9 @@ class TheServer {
          token: resp,
        });
      },
+     error: function(err) {
+       alert('Opps something went wrong:' + err)
+     }
    });
  }
 
@@ -97,7 +100,7 @@ getStopName(stopID) {
      // console.log("stop name received",data);
    },
    error: function(err) {
-     console.log('error:' + err)
+      alert('Opps something went wrong:' + err)
    }
  });
  return newdata;
@@ -116,7 +119,7 @@ getSchedule(routeID,tripID) {
      console.log("schedule received",data);
    },
    error: function(err) {
-     console.log('error:' + err)
+      alert('Opps something went wrong:' + err)
    }
  });
  return newdata;
@@ -136,7 +139,7 @@ getTripDestination(routeID) {
      // console.log("Trips received",data);
    },
    error: function(err) {
-     console.log('error:' + err)
+      alert('Opps something went wrong:' + err)
    }
  });
  return newdata;
@@ -155,7 +158,7 @@ getRouteShape(routeID) {
      // console.log("Trips received",data);
    },
    error: function(err) {
-     console.log('error:' + err)
+      alert('Opps something went wrong:' + err)
    }
  });
  return newdata;
@@ -175,7 +178,7 @@ getStopIDs(latitude,longitude){
      console.log("get stops id",data);
    },
    error: function(err) {
-     console.log('error:' + err)
+      alert('Opps something went wrong:' + err)
    }
  });
  return newdata;

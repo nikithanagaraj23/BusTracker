@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Hello Bustracker!</title>
+    <title>BusTracker</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   </head>
 
@@ -18,15 +18,10 @@
      <%= if get_flash(@conn, :error) do %>
        <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
      <% end %>
-
-
       <main role="main" >
         <%= render @view_module, @view_template, assigns %>
-          <div id="map" class="col-md-6"></div>
+          <div id="map" class="col-sm-12 col-md-6"></div>
       </main>
-      <!--
-      <div class="g-signin2" data-onsuccess="onSignIn"></div>
-      <button onclick="signOut();"> Sign out </a> -->
     </div> <!-- /container -->
   </script>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>

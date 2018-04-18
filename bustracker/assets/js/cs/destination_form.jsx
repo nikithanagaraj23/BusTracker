@@ -138,12 +138,18 @@ function showError(error) {
     var d2 = new Date(time);
     var tdiff = Math.abs(cur.getTime()-d2.getTime());
     var result = Math.ceil(tdiff / (3600 * 60));
-      // var dt = new Date(time);
-      // var t = dt.toLocaleTimeString();
-      // t = t.replace(/\u200E/g, '');
-      // t = t.replace(/^([^\d]*\d{1,2}:\d{1,2}):\d{1,2}([^\d]*)$/, '$1$2');
-      // var result = t;
+    if (result < 20 ){
+      return result + " mins";
+    }
+    else{
+      var dt = new Date(time);
+      var t = dt.toLocaleTimeString();
+      t = t.replace(/\u200E/g, '');
+      t = t.replace(/^([^\d]*\d{1,2}:\d{1,2}):\d{1,2}([^\d]*)$/, '$1$2');
+      var result = t;
       return result;
+    }
+
   }
 
   function updateRoute(routeID,tripID){
@@ -159,13 +165,13 @@ function showError(error) {
 
   let stopsavailable = _.map(params.form.stops, (uu) => <option key={uu.id} value={uu.id}>{uu.attributes.name}</option>);
   let predictions = _.map(params.form.predictions, (uu) => <div><Link className="row" key={uu.id} to={'/schedule/route='+uu.relationships.route.data.id+'&trip='+uu.relationships.trip.data.id}>
-  <div className="col-md-2"><span className="bus-number">{uu.relationships.route.data.id}</span></div>
-  <span className="destination-name col-md-5">{api.getTripDestination(uu.relationships.route.data.id).responseJSON.data[0].attributes.headsign}</span>
-  <span className="bus-time col-md-4">{formatDate(uu.attributes.arrival_time)} mins</span></Link></div>);
+  <div className="col-2"><span className="bus-number">{uu.relationships.route.data.id}</span></div>
+  <span className="destination-name col-5">{api.getTripDestination(uu.relationships.route.data.id).responseJSON.data[0].attributes.headsign}</span>
+  <span className="bus-time col-4">{formatDate(uu.attributes.arrival_time)} </span></Link></div>);
 
 
-  return <div className="find-buses col-md-10">
-    <h5>Let  your current location to load or<br></br> Enter the location from where you want to catch your bus</h5>
+  return <div className="find-buses col-sm-12 col-md-10">
+    <h5>Let your current location load or<br></br> Enter the location from where you want to catch your bus</h5>
       <FormGroup>
         <Geolocation
           onSuccess={console.log}
