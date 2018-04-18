@@ -327,7 +327,7 @@ html, body {
   max-width: 650px;
   height: 800px;
   overflow: scroll;
-  margin: 3rem 5rem;
+  margin: 0 5rem;
   color: #bcc3ca;
   > div{
     padding: 15px 10px;
@@ -367,4 +367,26 @@ html, body {
 
 .navbar-expand{
   flex-flow: wrap;
+}
+
+.back-btn{
+  margin-left: 5rem;
+  &:before{
+    display: inline;
+    content: '⇦';
+    color: #bcc3ca;
+    height: 50px;
+    width: 50px;
+    font-size: 3rem;
+  }
+  &:hover{
+    text-decoration: none;
+    &:before{
+      color: #a41715;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+
 }

@@ -48863,7 +48863,7 @@ var TheServer = function () {
           // console.log("stop name received",data);
         },
         error: function error(err) {
-          alert('Opps something went wrong:' + err);
+          console.log('Opps something went wrong:' + err);
         }
       });
       return newdata;
@@ -48883,7 +48883,7 @@ var TheServer = function () {
           console.log("schedule received", data);
         },
         error: function error(err) {
-          alert('Opps something went wrong:' + err);
+          console.log('Opps something went wrong:' + err);
         }
       });
       return newdata;
@@ -48903,7 +48903,7 @@ var TheServer = function () {
           // console.log("Trips received",data);
         },
         error: function error(err) {
-          alert('Opps something went wrong:' + err);
+          console.log('Opps something went wrong:' + err);
         }
       });
       return newdata;
@@ -48923,7 +48923,7 @@ var TheServer = function () {
           // console.log("Trips received",data);
         },
         error: function error(err) {
-          alert('Opps something went wrong:' + err);
+          console.log('Opps something went wrong:' + err);
         }
       });
       return newdata;
@@ -49847,13 +49847,18 @@ function Schedule(params) {
 
     return _react2.default.createElement(
         'div',
-        { className: 'trip-schedule' },
+        null,
+        _react2.default.createElement(_reactRouterDom.Link, { to: '/', className: 'back-btn' }),
         _react2.default.createElement(
-            'h4',
-            null,
-            'List of Schedules'
-        ),
-        schedules
+            'div',
+            { className: 'trip-schedule' },
+            _react2.default.createElement(
+                'h4',
+                null,
+                'List of Schedules'
+            ),
+            schedules
+        )
     );
 }
 

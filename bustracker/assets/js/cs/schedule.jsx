@@ -81,10 +81,10 @@ function decodeLevels(encodedLevelsString) {
     }
     </div>);
 
-  return<div className="trip-schedule">
+  return<div><Link to={'/'} className="back-btn"></Link><div className="trip-schedule">
     <h4>List of Schedules</h4>
     {schedules}
-  </div>;
+  </div></div>;
 }
 
 
