@@ -2,7 +2,7 @@
 
 export PORT=5660
 export MIX_ENV=prod
-export GIT_PATH=/home/bustracker/src/bustracker
+export GIT_PATH=/home/bustracker/src/BusTracker/bustracker
 
 PWD=`pwd`
 if [ $PWD != $GIT_PATH ]; then
@@ -33,7 +33,7 @@ if [ -d ~/www/bustracker ]; then
 fi
 
 mkdir -p ~/www/bustracker
-REL_TAR=~/src/bustracker/_build/prod/rel/bustracker/releases/0.0.1/bustracker.tar.gz
+REL_TAR=~/src/BusTracker/bustracker/_build/prod/rel/bustracker/releases/0.0.1/bustracker.tar.gz
 (cd ~/www/bustracker && tar xzvf $REL_TAR)
 
 crontab - <<CRONTAB
