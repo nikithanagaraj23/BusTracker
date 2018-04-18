@@ -47,6 +47,7 @@ defmodule Bustracker.Mixfile do
       {:poison, "~> 3.1"},
       {:ueberauth, "~> 0.4"},
       {:ueberauth_google, "~> 0.5"},
+      {:distillery, "~> 1.5", runtime: false},
     ]
   end
 
