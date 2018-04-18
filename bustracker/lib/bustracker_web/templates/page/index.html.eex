@@ -1,3 +1,15 @@
-<div id="root">
-      <p>React app not loaded...</p>
-</div>
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Place Autocomplete</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <div id="root">
+          <p>React app not loaded...</p>
+    </div>
+  </body>
+</html>
