@@ -15,8 +15,6 @@ class TheServer {
     });
   }
 
-<<<<<<< HEAD
-=======
   register_user(data) {
     $.ajax("/api/v1/users", {
       method: "post",
@@ -42,7 +40,6 @@ class TheServer {
     });
   }
 
->>>>>>> autocomplete
   request_users() {
     $.ajax("/api/v1/users", {
       method: "get",
