@@ -59,7 +59,7 @@ function decodeLevels(encodedLevelsString) {
 
   google_map();
   let schedule = api.getSchedule(routeID,tripID);
-
+  console.log("schedule",schedule.responseJSON.data[0].relationships.stop.data.id);
   function formatDate(time){
       var dt = new Date(time);
       var t = dt.toLocaleTimeString();
@@ -69,12 +69,18 @@ function decodeLevels(encodedLevelsString) {
       return result;
   }
 
+  console.log(params.form.stop);
   let schedules = _.map(schedule.responseJSON.data, (uu) =>
-    <div key={uu.id}>
-    {api.getStopName(uu.relationships.stop.data.id).responseJSON.data.attributes.name} {formatDate(uu.attributes.departure_time)}
-    </div>);
+    <div>
+      {uu.relationships.stop.data.id == params.form.stop ? <img src="/images/red_car.png"/>:
+      <div key={uu.id}>
+        {api.getStopName(uu.relationships.stop.data.id).responseJSON.data.attributes.name} {formatDate(uu.attributes.departure_time)}
+      </div>
+      }
+    </div>
+  );
 
-  return<div>
+  return<div style={{color:"white"}}>
     {schedules}
   </div>;
 }
