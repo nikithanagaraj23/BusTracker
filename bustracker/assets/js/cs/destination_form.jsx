@@ -134,11 +134,15 @@ function showError(error) {
 
 
   function formatDate(time){
-      var dt = new Date(time);
-      var t = dt.toLocaleTimeString();
-      t = t.replace(/\u200E/g, '');
-      t = t.replace(/^([^\d]*\d{1,2}:\d{1,2}):\d{1,2}([^\d]*)$/, '$1$2');
-      var result = t;
+    var cur = new Date();
+    var d2 = new Date(time);
+    var tdiff = Math.abs(cur.getTime()-d2.getTime());
+    var result = Math.ceil(tdiff / (3600 * 60));
+      // var dt = new Date(time);
+      // var t = dt.toLocaleTimeString();
+      // t = t.replace(/\u200E/g, '');
+      // t = t.replace(/^([^\d]*\d{1,2}:\d{1,2}):\d{1,2}([^\d]*)$/, '$1$2');
+      // var result = t;
       return result;
   }
 
@@ -157,7 +161,8 @@ function showError(error) {
   let predictions = _.map(params.form.predictions, (uu) => <div><Link className="row" key={uu.id} to={'/schedule/route='+uu.relationships.route.data.id+'&trip='+uu.relationships.trip.data.id}>
   <div className="col-md-2"><span className="bus-number">{uu.relationships.route.data.id}</span></div>
   <span className="destination-name col-md-5">{api.getTripDestination(uu.relationships.route.data.id).responseJSON.data[0].attributes.headsign}</span>
-  <span className="bus-time col-md-4">{formatDate(uu.attributes.arrival_time)}</span></Link></div>);
+  <span className="bus-time col-md-4">{formatDate(uu.attributes.arrival_time)} mins</span></Link></div>);
+
 
   return <div className="find-buses col-md-10">
     <h5>Let  your current location to load or<br></br> Enter the location from where you want to catch your bus</h5>
