@@ -37,7 +37,6 @@ let LoginForm = connect(({login}) => {return {login};})((props) => {
 
   function create_token(ev) {
     api.submit_login(props.login);
-    console.log(props.login);
   }
 
   return <div className="navbar-text">
@@ -62,8 +61,16 @@ let LoginForm = connect(({login}) => {return {login};})((props) => {
 });
 
 let Session = connect(({token}) => {return {token};})((props) => {
+
+  function log_out(ev) {
+    localStorage.clear();
+    window.location.reload();
+  }
+
   return <div className="navbar-text">
-    <span className="login"> Welcome { window.localStorage.getItem("user_id") } </span>
+    <span className="login">
+    Welcome { window.localStorage.getItem("user_id") ? window.localStorage.getItem("user_id") : window.localStorage.getItem("googleuser_id") }
+    </span>
     <Link className="btn btn-primary" onClick={log_out} to={'/'}>Log Out</Link>
   </div>;
 });
@@ -96,25 +103,20 @@ function Nav(props) {
     );
   }
   else {
-    session_info = <LoginForm />
+    return (
+      <nav className="navbar navbar-dark bg-dark navbar-expand">
+        <span className="navbar-brand">
+          Bustracker
+        </span>
+        <ul className="navbar-nav mr-auto">
+          <NavItem>
+              <NavLink to="/register" href="#" className="nav-link">Register</NavLink>
+          </NavItem>
+        </ul>
+        <LoginForm />
+      </nav>
+    );
   }
-
-  return (
-    <nav className="navbar navbar-dark bg-dark navbar-expand">
-      <span className="navbar-brand">
-        Bustracker
-      </span>
-      <ul className="navbar-nav mr-auto">
-        <NavItem>
-          <NavLink to="/" exact={true} activeClassName="active" className="nav-link">Feed</NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink to="/users" href="#" className="nav-link">All Users</NavLink>
-        </NavItem>
-      </ul>
-      { session_info }
-    </nav>
-  );
 }
 
 function state2props(state) {
@@ -124,4 +126,4 @@ function state2props(state) {
   };
 }
 
-export default connect(state2props)(Nav);
+export default connect(state2props, null, null, {pure: false})(Nav);
