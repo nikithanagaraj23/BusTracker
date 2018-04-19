@@ -164,6 +164,18 @@ html, body {
       background: #c71613;
     }
   }
+  #location-details{
+    position: relative;
+    #clear{
+      position: absolute;
+      right: 0;
+      top: 0;
+      margin: 0;
+      padding: 6px 1rem;
+      border: 1px solid;
+      color: white;
+    }
+  }
 }
 .navbar{
   z-index: 1;

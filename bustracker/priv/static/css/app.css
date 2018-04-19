@@ -6395,6 +6395,16 @@ html, body {
       border: #a41715; }
     .find-buses .btn:hover {
       background: #c71613; }
+  .find-buses #location-details {
+    position: relative; }
+    .find-buses #location-details #clear {
+      position: absolute;
+      right: 0;
+      top: 0;
+      margin: 0;
+      padding: 6px 1rem;
+      border: 1px solid;
+      color: white; }
 
 .navbar {
   z-index: 1; }
