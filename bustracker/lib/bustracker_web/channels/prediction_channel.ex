@@ -3,10 +3,10 @@ defmodule BustrackerWeb.PredictionChannel do
 
   alias Bustracker.Prediction
 
-  def join("prediction:" <> stop, payload, socket) do
-    if authorized?(payload) do
+  def join("prediction:", %{"stop" => stop}, socket) do
+    if authorized?(stop) do
       predictions = Prediction.get_prediction(stop)
-      {:ok ,  %{"join" => stop, "predictions" => predictions}, socket}
+      {:ok , %{"predictions" => predictions}, socket}
     else
       {:error, %{reason: "unauthorized"}}
     end
