@@ -124,10 +124,10 @@ function showError(error) {
     channel.join()
                .receive("ok", resp => { getView(resp)})
                .receive("error", resp => { console.log("Unable to join", resp)});
-    let allRoutes = _.map(params.form.predictions, (uu) => uu.relationships.route.data.id);
-    console.log(allRoutes);
-    let destinations = _.map(allRoutes, (uu) => api.getTripDestination(uu).responseJSON.data[0].attributes.headsign);
-    console.log(destinations);
+    // let allRoutes = _.map(params.form.predictions, (uu) => uu.relationships.route.data.id);
+    // console.log(allRoutes);
+    // let destinations = _.map(allRoutes, (uu) => api.getTripDestination(uu).responseJSON.data[0].attributes.headsign);
+    // console.log(destinations);
     setInterval(function(){channel.push("callpredictions", {stop: stop})
                                   .receive("ok", resp => { getView(resp)});}, 60000);
   }
@@ -163,6 +163,15 @@ function showError(error) {
     params.dispatch(action);
   }
 
+  function clear(ev) {
+    console.log('clear');
+    document.getElementById("addr").value = "";
+    params.dispatch({
+      type: 'CLEAR_FORM',
+    });
+
+  }
+
   let stopsavailable = _.map(params.form.stops, (uu) => <option key={uu.id} value={uu.id}>{uu.attributes.name}</option>);
   let predictions = _.map(params.form.predictions, (uu) => <div><Link className="row" key={uu.id} to={'/schedule/route='+uu.relationships.route.data.id+'&trip='+uu.relationships.trip.data.id}>
   <div className="col-2"><span className="bus-number">{uu.relationships.route.data.id}</span></div>
@@ -182,12 +191,13 @@ function showError(error) {
             getCurrentPosition
           }) =>
             <div id="location-details">
-              <Autocomplete className="form-control" id="addr" name="location" value={params.form.location ? params.form.location : getLocation()} onChange={fetchStops}
+              <Autocomplete className="form-control" id="addr" name="location" value={params.form.location ? params.form.location : getLocation()} 
                 onPlaceSelected={(place) => {
                   getaddress(place.geometry.location.lat(), place.geometry.location.lng())
                 }}
                 types={['geocode']}
                 />
+              <Button id='clear' onClick={clear}>clear</Button>
             </div>}
         />
     </FormGroup>

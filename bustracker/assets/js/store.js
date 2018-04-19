@@ -54,6 +54,8 @@ function users(state = [], action) {
 
 let empty_form = {
   user_id: "",
+  latitude: "",
+  longitude: "",
   location: "",
   stops: "",
   stop: "",

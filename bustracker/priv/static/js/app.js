@@ -49276,14 +49276,10 @@ function DestinationForm(params) {
     }).receive("error", function (resp) {
       console.log("Unable to join", resp);
     });
-    var allRoutes = _.map(params.form.predictions, function (uu) {
-      return uu.relationships.route.data.id;
-    });
-    console.log(allRoutes);
-    var destinations = _.map(allRoutes, function (uu) {
-      return _api2.default.getTripDestination(uu).responseJSON.data[0].attributes.headsign;
-    });
-    console.log(destinations);
+    // let allRoutes = _.map(params.form.predictions, (uu) => uu.relationships.route.data.id);
+    // console.log(allRoutes);
+    // let destinations = _.map(allRoutes, (uu) => api.getTripDestination(uu).responseJSON.data[0].attributes.headsign);
+    // console.log(destinations);
     setInterval(function () {
       channel.push("callpredictions", { stop: stop }).receive("ok", function (resp) {
         getView(resp);
@@ -49317,6 +49313,14 @@ function DestinationForm(params) {
       data: data
     };
     params.dispatch(action);
+  }
+
+  function clear(ev) {
+    console.log('clear');
+    document.getElementById("addr").value = "";
+    params.dispatch({
+      type: 'CLEAR_FORM'
+    });
   }
 
   var stopsavailable = _.map(params.form.stops, function (uu) {
@@ -49385,12 +49389,17 @@ function DestinationForm(params) {
           return _react2.default.createElement(
             'div',
             { id: 'location-details' },
-            _react2.default.createElement(_reactGoogleAutocomplete2.default, { className: 'form-control', id: 'addr', name: 'location', value: params.form.location ? params.form.location : getLocation(), onChange: fetchStops,
+            _react2.default.createElement(_reactGoogleAutocomplete2.default, { className: 'form-control', id: 'addr', name: 'location', value: params.form.location ? params.form.location : getLocation(),
               onPlaceSelected: function onPlaceSelected(place) {
                 getaddress(place.geometry.location.lat(), place.geometry.location.lng());
               },
               types: ['geocode']
-            })
+            }),
+            _react2.default.createElement(
+              _reactstrap.Button,
+              { id: 'clear', onClick: clear },
+              'clear'
+            )
           );
         }
       })
@@ -50032,6 +50041,8 @@ function users() {
 
 var empty_form = {
   user_id: "",
+  latitude: "",
+  longitude: "",
   location: "",
   stops: "",
   stop: "",
