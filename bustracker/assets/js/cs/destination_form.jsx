@@ -120,7 +120,7 @@ function showError(error) {
     socket.connect();
     var stop = parseInt(params.form.stop);
     console.log(stop);
-    let channel = socket.channel("prediction:"+ stop, {});
+    let channel = socket.channel("prediction:", {stop: stop});
     channel.join()
                .receive("ok", resp => { getView(resp)})
                .receive("error", resp => { console.log("Unable to join", resp)});
