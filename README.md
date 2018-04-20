@@ -1,8 +1,3 @@
 # BusTracker
 
-To Do:
-
-- User Registration
-- User Login
-- Predict bus location
-- Forgot Password
+BusTracker is a single page web application which allows users to track the arrival times of the MBTA buses in real time. To use the application the user should initially register, by providing a user name an a valid password which is greater than six digits. This is stored in our postgres database. Once registered, the user can now login using the form present in the navigation bar at the top of the page. The user can also sign into this application using their gmail accounts by selecting the “Sign in with Google” button present on the navigation bar. Once inside the application, the user can now either use their current location or enter a location from which they would like to catch a bus.The application will provide a list of bus stops around them from which they can select a stop and click on “Get Predictions” button. The user can now view a list of buses which will be arriving at that stop with the destinations and the expected arrival times of the buses next to it. The arrival times of the buses get updated in real time. So when your bus is getting closer, the user will now be aware of that.  The user can now click on any of these bus routes and see the stops present and the expected arrival time of the bus at those stops. In order to increase the user experience, the user can see a map adjacent to the list of stops in that route. The map shows the route which will be taken by the bus selected by the user with the source and destinations of the bus marked clearly on the map. This application is completely responsive and can be used conveniently on desktops, ipads as well as in mobile devices. Once the user in done using the application, he or she can logout using the logout button from the navigation bar.
