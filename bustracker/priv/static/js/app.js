@@ -49336,20 +49336,23 @@ function DestinationForm(params) {
     }).then(function (responseJson) {
       var address = responseJson.results[0].formatted_address;
       document.getElementById("addr").value = address;
-      var data = {};
-      if ($("input[name=location]")) {
-        data['location'] = $("input[name=location]").val();
-      }
-      var action = {
-        type: 'UPDATE_FORM',
-        data: data
-      };
-      params.dispatch(action);
+      // let data = {};
+      // if($("input[name=location]")){
+      //   data['location'] = $("input[name=location]").val();
+      // }
+      // let action = {
+      //   type: 'UPDATE_FORM',
+      //   data: data,
+      // };
+      // params.dispatch(action);
       google_map(lat, lon);
     });
 
     var allStops = _api2.default.getStopIDs(lat, lon);
     var data = {};
+    if ($("input[name=location]")) {
+      data['location'] = $("input[name=location]").val();
+    }
     data['stops'] = allStops.responseJSON.data;
     var action = {
       type: 'UPDATE_FORM',
@@ -49373,6 +49376,7 @@ function DestinationForm(params) {
   }
 
   function getView(data2) {
+    console.log("New predictions", data2);
     var predictions = data2["predictions"];
     var data = {};
     console.log("GET VIEW");
@@ -49384,21 +49388,20 @@ function DestinationForm(params) {
     params.dispatch(action);
   }
 
-  function getPrediction() {
+  function getPrediction(ev) {
     var socket = new _phoenix.Socket("/socket", { params: { token: window.userToken } });
+    var channel;
+    var tgt = $(ev.target);
     socket.connect();
     var stop = parseInt(params.form.stop);
     console.log(stop);
-    var channel = socket.channel("prediction:", { stop: stop });
+    channel = socket.channel("prediction:", { stop: stop });
+    console.log(channel);
     channel.join().receive("ok", function (resp) {
       getView(resp);
     }).receive("error", function (resp) {
       console.log("Unable to join", resp);
     });
-    // let allRoutes = _.map(params.form.predictions, (uu) => uu.relationships.route.data.id);
-    // console.log(allRoutes);
-    // let destinations = _.map(allRoutes, (uu) => api.getTripDestination(uu).responseJSON.data[0].attributes.headsign);
-    // console.log(destinations);
     setInterval(function () {
       channel.push("callpredictions", { stop: stop }).receive("ok", function (resp) {
         getView(resp);
@@ -49440,8 +49443,10 @@ function DestinationForm(params) {
     params.dispatch({
       type: 'CLEAR_FORM'
     });
+    window.location.reload(true);
   }
 
+  console.log(params.form.predictions);
   var stopsavailable = _.map(params.form.stops, function (uu) {
     return _react2.default.createElement(
       'option',
@@ -49516,7 +49521,7 @@ function DestinationForm(params) {
             }),
             _react2.default.createElement(
               _reactstrap.Button,
-              { id: 'clear', onClick: clear },
+              { id: 'clear', name: 'clear', onClick: clear },
               '\u2715'
             )
           );

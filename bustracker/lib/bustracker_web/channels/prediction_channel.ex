@@ -26,6 +26,7 @@ defmodule BustrackerWeb.PredictionChannel do
     {:noreply, socket}
   end
 
+
   # Add authorization logic here as required.
   defp authorized?(_payload) do
     true

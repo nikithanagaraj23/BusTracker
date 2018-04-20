@@ -67,20 +67,23 @@ function showError(error) {
           .then((responseJson) => {
               var address = responseJson.results[0].formatted_address;
               document.getElementById("addr").value = address;
-              let data = {};
-              if($("input[name=location]")){
-                data['location'] = $("input[name=location]").val();
-              }
-              let action = {
-                type: 'UPDATE_FORM',
-                data: data,
-              };
-              params.dispatch(action);
+              // let data = {};
+              // if($("input[name=location]")){
+              //   data['location'] = $("input[name=location]").val();
+              // }
+              // let action = {
+              //   type: 'UPDATE_FORM',
+              //   data: data,
+              // };
+              // params.dispatch(action);
               google_map(lat, lon);
   })
 
   let allStops = api.getStopIDs(lat,lon);
   let data = {};
+  if($("input[name=location]")){
+    data['location'] = $("input[name=location]").val();
+  }
   data['stops'] = allStops.responseJSON.data;
   let action = {
     type: 'UPDATE_FORM',
@@ -104,6 +107,7 @@ function showError(error) {
   }
 
   function getView(data2){
+    console.log("New predictions", data2);
     let predictions = data2["predictions"];
     let data = {};
     console.log("GET VIEW");
@@ -115,21 +119,20 @@ function showError(error) {
     params.dispatch(action);
   }
 
-  function getPrediction(){
+  function getPrediction(ev){
     let socket = new Socket("/socket", {params: {token: window.userToken}});
+    var channel;
+    var tgt = $(ev.target);
     socket.connect();
     var stop = parseInt(params.form.stop);
     console.log(stop);
-    let channel = socket.channel("prediction:", {stop: stop});
+    channel = socket.channel("prediction:", {stop: stop});
+    console.log(channel);
     channel.join()
-               .receive("ok", resp => { getView(resp)})
-               .receive("error", resp => { console.log("Unable to join", resp)});
-    // let allRoutes = _.map(params.form.predictions, (uu) => uu.relationships.route.data.id);
-    // console.log(allRoutes);
-    // let destinations = _.map(allRoutes, (uu) => api.getTripDestination(uu).responseJSON.data[0].attributes.headsign);
-    // console.log(destinations);
+                 .receive("ok", resp => { getView(resp)})
+                 .receive("error", resp => { console.log("Unable to join", resp)});
     setInterval(function(){channel.push("callpredictions", {stop: stop})
-                                  .receive("ok", resp => { getView(resp)});}, 60000);
+                                    .receive("ok", resp => { getView(resp)});}, 60000);
   }
 
 
@@ -163,15 +166,17 @@ function showError(error) {
     params.dispatch(action);
   }
 
+
   function clear(ev) {
     console.log('clear');
     document.getElementById("addr").value = "";
     params.dispatch({
       type: 'CLEAR_FORM',
     });
-
+    window.location.reload(true);
   }
 
+  console.log(params.form.predictions);
   let stopsavailable = _.map(params.form.stops, (uu) => <option key={uu.id} value={uu.id}>{uu.attributes.name}</option>);
   let predictions = _.map(params.form.predictions, (uu) => <div><Link className="row" key={uu.id} to={'/schedule/route='+uu.relationships.route.data.id+'&trip='+uu.relationships.trip.data.id}>
   <div className="col-2"><span className="bus-number">{uu.relationships.route.data.id}</span></div>
@@ -197,7 +202,7 @@ function showError(error) {
                 }}
                 types={['geocode']}
                 />
-              <Button id='clear' onClick={clear}>&#10005;</Button>
+              <Button id='clear' name="clear" onClick={clear}>&#10005;</Button>
             </div>}
         />
     </FormGroup>
